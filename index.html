@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Neighborhood Map - New Orleans (Udacity Project 5)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/lib/jQuery.js"></script>
+    <style type="text/css">
+      #map-canvas {
+        height: 500px;
+        width: 800px;
+      }
+    </style>
+
+    <script type="text/javascript"
+        src="http://www.google.com/jsapi?autoload={'modules':[{name:'maps',version:3,other_params:''}]}"></script>
+    <!-- EVENTUALL USE API SCRIPT
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=API_KEY"-->
+    <script type="text/javascript">
+      function init() {
+        var mapOptions = {
+          center: new google.maps.LatLng(29.9500, -90.0667),
+          zoom: 12,
+          mapTypeControl: true,
+          mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.DEFAULT,
+          mapTypeIds: [
+            google.maps.MapTypeId.HYBRID,
+            google.maps.MapTypeId.ROADMAP
+          ]
+        },
+        zoomControl: true,
+        zoomControlOptions: {
+          style: google.maps.ZoomControlStyle.SMALL
+        }
+      };
+        var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
+      }
+
+      google.maps.event.addDomListener(window, 'load', init);
+
+      // Reverse Geocoding to Return City & State Names
+      var geocodingAPI = "https://maps.googleapis.com/maps/api/geocode/json?latlng=29.9500,-90.0667";
+
+      $.getJSON(geocodingAPI, function (json) {
+          if (json.status == "OK") {
+              //Check result 0
+              var result = json.results[0];
+              //look for locality tag and administrative_area_level_1
+              var city = "";
+              var state = "";
+              for (var i = 0, len = result.address_components.length; i < len; i++) {
+                  var ac = result.address_components[i];
+                  if(ac.types.indexOf("locality") >= 0) city = ac.long_name;
+                  if(ac.types.indexOf("administrative_area_level_1") >= 0) state = ac.long_name;
+                }
+              //only report if we got Good Stuff
+              if(city != '' && state != '') {
+                $("#city-name").html("Let's Explore the Beautiful City of "+city+", "+state+"!");
+                }
+                  console.log("Let's Explore the Beautiful City of " + city + ", " + state + "!");
+         }
+       })
+    </script>
+  </head>
+  <body>
+    <section id="searchbar">
+      <header id="header">
+        <h1><span id="city-name"></span></h1>
+      <input id="searchbar" placeholder="What would you like to see in this city? Or choose a filter to your left to begin exploring!" autofocus>
+      </header>
+    </section>
+      <div style="float:right; align:left">
+          <ul data-bind="foreach: filterList">
+              <li data-bind="text: name"><!-- later add a data-bind for click, $parent.setFilter to pass data to google maps & display only those types selected on map-->
+              </li>
+          </ul>
+      </div>
+      <div id="map-canvas"></div>
+    <script src="js/lib/knockout-3.3.0.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
