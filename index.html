@@ -14,7 +14,7 @@
 
     <script type="text/javascript"
         src="http://www.google.com/jsapi?autoload={'modules':[{name:'maps',version:3,other_params:''}]}"></script>
-    <!-- EVENTUALL USE API SCRIPT
+    <!-- EVENTUALLY USE API SCRIPT
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=API_KEY"-->
     <script type="text/javascript">
@@ -65,19 +65,23 @@
     </script>
   </head>
   <body>
-    <section id="searchbar">
+    <section id="title">
       <header id="header">
         <h1><span id="city-name"></span></h1>
-      <input id="searchbar" placeholder="What would you like to see in this city? Or choose a filter to your left to begin exploring!" autofocus>
+        <form id="form-container">
+          <input id="searchbar" type="text" placeholder="What would you like to see in this city? Or choose a filter to your left to begin!" autofocus>
+        </form>
       </header>
     </section>
-      <div style="float:right; align:left">
+      <div style="float:right">
           <ul data-bind="foreach: filterList">
               <li data-bind="text: name"><!-- later add a data-bind for click, $parent.setFilter to pass data to google maps & display only those types selected on map-->
               </li>
           </ul>
+          <h3 id="wikipedia-header" class="wikipedia-container">Relevant Wikipedia Links</h3>
+          <ul id="wikipedia-links">Facts about your search results</ul>
       </div>
-      <div id="map-canvas"></div>
+      <div id="map-canvas" style="float:left"></div>
     <script src="js/lib/knockout-3.3.0.js"></script>
     <script src="js/app.js"></script>
   </body>

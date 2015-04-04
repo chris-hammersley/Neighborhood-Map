@@ -1,26 +1,75 @@
+function loadData() {
+
+//    var $body = $('body');
+    var $wikiElem = $('#wikipedia-links');
+//    var $nytHeaderElem = $('#nytimes-header');
+//    var $nytElem = $('#nytimes-articles');
+//    var $greeting = $('#greeting');
+
+    // Clear Existing Data Before New Request
+    $wikiElem.text("");
+//    $nytElem.text("");
+
+    // Assign Searchbar Value to Variable
+    var searchStr = $('#searchbar').val();
+//    var cityStr = $('#city').val();
+//    var address = streetStr + ', ' + cityStr;
+
+    // Initiate Wikipedia AJAX Request
+    var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='
+                    + searchStr + '&format=json&callback=wikiCallback';
+
+    var wikiRequestTimeout = setTimeout(function() {
+        $wikiElem.text("Failed to get Wikipedia resources");
+    }, 8000);
+
+    $.ajax({
+        url: wikiUrl,
+        dataType: "jsonp",
+
+        // Callback for JSONP
+        success: function(response) {
+            var articleList = response[1];
+
+            for (var i = 0; i < articleList.length; i++) {
+                articleStr = articleList[i];
+                var url = 'http://en.wikipedia.org/wiki/' + articleStr;
+                $wikiElem.append('<li><a href="' + url + '">'
+                    + articleStr + '</a></li>');
+            };
+
+            clearTimeout(wikiRequestTimeout);
+        }
+    });
+    return false;
+};
+
+// loadData();
+$('#form-container').submit(loadData);
+
 var mapFilters = [
         {
-            name : 'Food',
+            name : "Grub",
         //    clickCount : 0,
         //    imgSrc : 'img/felix.jpeg',
         //    nicknames: ['Hi-Hat']
         },{
-            name : 'Bars',
+            name : "Booze",
         //    clickCount : 0,
         //    imgSrc : 'img/tom.jpg',
         //    nicknames: ['Pokerface']
         },{
-            name : 'Walking Tours',
+            name : "Walking Tours",
         //    clickCount : 0,
         //    imgSrc : 'img/josi.jpg',
         //    nicknames: ['Thimblelina']
         },{
-            name : 'Entertainment',
+            name : "What's Crazy",
         //    clickCount : 0,
         //    imgSrc : 'img/vicki.jpg',
         //    nicknames: ['SexyBabe']
         },{
-            name : 'Sights',
+            name : "Sights",
         //    clickCount : 0,
         //    imgSrc : 'img/bebop.jpg',
         //    nicknames: ['Jumper']
