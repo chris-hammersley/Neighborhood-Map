@@ -1,3 +1,4 @@
+// API Calls
 function loadData() {
 
 //    var $body = $('body');
@@ -12,8 +13,16 @@ function loadData() {
 
     // Assign Searchbar Value to Variable
     var searchStr = $('#searchbar').val();
+//    var latStr = '29.9500';
+//    var lngStr = '-90.0667';
+//    var locationLatLong = 'lat=29.9500&lng=-90.0667';
 //    var cityStr = $('#city').val();
 //    var address = streetStr + ', ' + cityStr;
+
+    // Initiate Instagram Request
+  //  var instagramPic = 'https://api.instagram.com/v1/locations/search?lat=' + latStr + '&lng=' + lngStr;
+
+    // https://api.instagram.com/v1/locations/search?lat=29.9500&lng=-90.0667&client_id=ecdea4ae8c6f476a9a84e4a47d999170
 
     // Initiate Wikipedia AJAX Request
     var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='
@@ -46,6 +55,24 @@ function loadData() {
 
 // loadData();
 $('#form-container').submit(loadData);
+
+// Open Links in Modal after Document is Ready
+$(document).ready(function() { init() })
+
+function init() {
+    $('#overlay').click(function() { closeDialog(); })
+}
+
+var feed = new Instafeed({
+    get: 'tagged',
+    tagName: 'instagramnola',
+    target: 'instafeed',
+    sortBy: 'most-recent',
+    limit: 8,
+    template: '<a href="{{link}}" target="_blank"><img src="{{image}}" /></a>',
+    clientId: 'ecdea4ae8c6f476a9a84e4a47d999170'
+});
+feed.run();
 
 var mapFilters = [
         {

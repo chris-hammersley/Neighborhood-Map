@@ -65,6 +65,7 @@
     </script>
   </head>
   <body>
+    <div id="instafeed"></div>
     <section id="title">
       <header id="header">
         <h1><span id="city-name"></span></h1>
@@ -74,15 +75,17 @@
       </header>
     </section>
       <div style="float:right">
+        <h3 id="wikipedia-header" class="wikipedia-container">Find It Quickly!</h3>
           <ul data-bind="foreach: filterList">
               <li data-bind="text: name"><!-- later add a data-bind for click, $parent.setFilter to pass data to google maps & display only those types selected on map-->
               </li>
           </ul>
           <h3 id="wikipedia-header" class="wikipedia-container">Relevant Wikipedia Links</h3>
-          <ul id="wikipedia-links">Facts about your search results</ul>
+          <ul id="wikipedia-links"></ul>
       </div>
       <div id="map-canvas" style="float:left"></div>
     <script src="js/lib/knockout-3.3.0.js"></script>
+    <script src="js/lib/instafeed.min.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>
