@@ -143,6 +143,19 @@ input[type="checkbox"] {
 	box-shadow: none;
 }
 
+#msg {
+    border:1px solid #333;
+    background-color:#ccc;
+    padding: 2em;
+    word-wrap: break-word;
+    margin-bottom: 2em;
+}
+
+#display {
+    padding:2em;
+    border: 1px solid #999;
+}
+
 #main {
 	position: relative;
 	z-index: 2;

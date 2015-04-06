@@ -9,6 +9,11 @@ http://discussions.udacity.com/t/google-maps-allows-data-binding-with-mvc-object
 https://developers.google.com/maps/articles/mvcfun
 https://developers.google.com/maps/documentation/javascript/examples/control-options
 
+<strong>Google Maps & Markers</strong>
+https://developers.google.com/maps/documentation/javascript/examples/marker-simple
+https://developers.google.com/maps/tutorials/
+http://snippetrepo.com/snippets/multiple-markers-using-json-with-google-maps-api
+
 <strong>Reverse Geocoding for Place Names</strong>
 https://developers.google.com/maps/documentation/geocoding/#ReverseGeocoding
 http://stackoverflow.com/questions/22704997/how-to-get-city-name-from-latitude-and-longitude-in-phone-gap
@@ -19,3 +24,14 @@ http://instafeedjs.com/
 https://github.com/stevenschobert/instafeed.js/labels/question
 
 <strong>FourSquare help</strong>
+https://developer.foursquare.com/overview/auth#userless
+http://stackoverflow.com/questions/16167176/plot-venues-from-foursquare-on-google-maps
+https://developer.foursquare.com/docs/venues/explore
+https://developer.foursquare.com/categorytree
+http://api.jquery.com/jQuery.getJSON/
+
+<strong>jQuery</strong>
+http://api.jquery.com/val/
+
+<strong>Twitter</strong>
+https://dev.twitter.com/rest/reference/get/search/tweets

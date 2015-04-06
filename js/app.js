@@ -1,40 +1,25 @@
 // API Calls
 function loadData() {
 
-//    var $body = $('body');
     var $wikiElem = $('#wikipedia-links');
-//    var $nytHeaderElem = $('#nytimes-header');
-//    var $nytElem = $('#nytimes-articles');
-//    var $greeting = $('#greeting');
 
     // Clear Existing Data Before New Request
-    $wikiElem.text("");
-//    $nytElem.text("");
+    $wikiElem.text('');
 
     // Assign Searchbar Value to Variable
     var searchStr = $('#searchbar').val();
-//    var latStr = '29.9500';
-//    var lngStr = '-90.0667';
-//    var locationLatLong = 'lat=29.9500&lng=-90.0667';
-//    var cityStr = $('#city').val();
-//    var address = streetStr + ', ' + cityStr;
-
-    // Initiate Instagram Request
-  //  var instagramPic = 'https://api.instagram.com/v1/locations/search?lat=' + latStr + '&lng=' + lngStr;
-
-    // https://api.instagram.com/v1/locations/search?lat=29.9500&lng=-90.0667&client_id=ecdea4ae8c6f476a9a84e4a47d999170
 
     // Initiate Wikipedia AJAX Request
     var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='
                     + searchStr + '&format=json&callback=wikiCallback';
 
     var wikiRequestTimeout = setTimeout(function() {
-        $wikiElem.text("Failed to get Wikipedia resources");
+        $wikiElem.text('Failed to get Wikipedia resources');
     }, 8000);
 
     $.ajax({
         url: wikiUrl,
-        dataType: "jsonp",
+        dataType: 'jsonp',
 
         // Callback for JSONP
         success: function(response) {
@@ -56,16 +41,10 @@ function loadData() {
 // loadData();
 $('#form-container').submit(loadData);
 
-// Open Links in Modal after Document is Ready
-$(document).ready(function() { init() })
-
-function init() {
-    $('#overlay').click(function() { closeDialog(); })
-}
-
+// Instafeed showing Instagram Pics
 var feed = new Instafeed({
     get: 'tagged',
-    tagName: 'instagramnola',
+    tagName: 'nolaarchitecture',
     target: 'instafeed',
     sortBy: 'most-recent',
     limit: 8,
@@ -74,32 +53,80 @@ var feed = new Instafeed({
 });
 feed.run();
 
+/* FourSquare
+var lat = 29.9500;
+var lng = -90.0667;
+var location = lat + ',' + lng;        
+$.getJSON('https://api.foursquare.com/v2/venues/search', {
+    ll: location,
+    radius: 100,
+    limit: 50,
+    intent: 'browse',
+    query: 'food',
+    categoryId: '4d4b7105d754a06374d81259',
+    client_id: 'GDIGYUEJ2F35H1E3BQCCSZVNZEP2OAJBNOTD2BEVHL0IXF3O',
+    client_secret: 'HIO22Q3EXWKQ12YQ15NHN02X4L4V35NVP1C1GFEPGQ1C5WCW',
+    v: 20130420
+ }).done(function(data) {
+    $.each(data.response.venues, function(i, item) {
+        console.log(item);
+        map.data.addGeoJson(item);
+    });
+});
+*/
+
+/* Twitter Trending Tweets
+var script = document.createElement('script');
+script.src = 'https://api.twitter.com/1.1/geo/search.json?accuracy=0&query=New%20Orleans&granularity=neighborhood&autocomplete=false&trim_place=false';
+document.getElementsByTagName('head')[0].appendChild(script);
+
+function tweet_actions(response) {
+  map.data.addGeoJson(response);
+} */
+
 var mapFilters = [
         {
-            name : "Grub",
-        //    clickCount : 0,
+            name : 'Grub',
+            foursqCatId: '4d4b7105d754a06374d81259',
+            instafeedTagName : ['nolafood', 'eatnola', 'noladining', 'nolafoodies', 'nolaeats', 'frenchmarket', 'killerpoboys', 'coopsplace'],
         //    imgSrc : 'img/felix.jpeg',
         //    nicknames: ['Hi-Hat']
         },{
-            name : "Booze",
-        //    clickCount : 0,
+            name : 'Booze',
+            foursqCatId : '4d4b7105d754a06376d81259',
+            instafeedTagName : ['nolacocktails', 'handgrenades', 'patobriens', 'erinrose', 'rooseveltbar'],
         //    imgSrc : 'img/tom.jpg',
         //    nicknames: ['Pokerface']
         },{
-            name : "Walking Tours",
-        //    clickCount : 0,
+            name : 'Music',
+            foursqCatId : '4bf58dd8d48988d1e5931735',
+            instafeedTagName : ['frenchmanstreet', 'preservationhall', 'nolamusic', 'nolajazzfest', ''],
+        //    imgSrc : 'img/bebop.jpg',
+        //    nicknames: ['Jumper']
+        },{
+            name : 'Festivals',
+            foursqCatId : '4d4b7105d754a06373d81259',
+            instafeedTagName : ['frenchquarterfestival', 'bayouboogaloo', 'satchmofest', '', ''],
+        //    imgSrc : 'img/bebop.jpg',
+        //    nicknames: ['Jumper']
+        },{
+            name : 'Hoods',
+            foursqCatId : '4f2a25ac4b909258e854f55f',
+            instafeedTagName : ['bywater', 'marigny', 'treme', 'frenchquarter', 'uptownnola', 'lower9th', 'poydrascorridor', 'gardendistrict'],
         //    imgSrc : 'img/josi.jpg',
         //    nicknames: ['Thimblelina']
         },{
-            name : "What's Crazy",
-        //    clickCount : 0,
-        //    imgSrc : 'img/vicki.jpg',
-        //    nicknames: ['SexyBabe']
-        },{
-            name : "Sights",
-        //    clickCount : 0,
+            name : 'Cemetaries',
+            foursqCatId : '4bf58dd8d48988d15c941735',
+            instafeedTagName : 'nolacemetaries',
         //    imgSrc : 'img/bebop.jpg',
         //    nicknames: ['Jumper']
+        },{
+            name : 'What\'s Crazy',
+            foursqCatId : '4d4b7105d754a06373d81259',
+            instafeedTagName : ['nolabulls', 'reddressrunnola', 'neworleansburlesque', 'nola', 'nolamardigras'],
+        //    imgSrc : 'img/vicki.jpg',
+        //    nicknames: ['SexyBabe']
         }
              ]
 
