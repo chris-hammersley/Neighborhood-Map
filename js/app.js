@@ -53,87 +53,42 @@ var feed = new Instafeed({
 });
 feed.run();
 
-/* FourSquare
-var lat = 29.9500;
-var lng = -90.0667;
-var location = lat + ',' + lng;        
-$.getJSON('https://api.foursquare.com/v2/venues/search', {
-    ll: location,
-    radius: 100,
-    limit: 50,
-    intent: 'browse',
-    query: 'food',
-    categoryId: '4d4b7105d754a06374d81259',
-    client_id: 'GDIGYUEJ2F35H1E3BQCCSZVNZEP2OAJBNOTD2BEVHL0IXF3O',
-    client_secret: 'HIO22Q3EXWKQ12YQ15NHN02X4L4V35NVP1C1GFEPGQ1C5WCW',
-    v: 20130420
- }).done(function(data) {
-    $.each(data.response.venues, function(i, item) {
-        console.log(item);
-        map.data.addGeoJson(item);
-    });
-});
-*/
-
-/* Twitter Trending Tweets
-var script = document.createElement('script');
-script.src = 'https://api.twitter.com/1.1/geo/search.json?accuracy=0&query=New%20Orleans&granularity=neighborhood&autocomplete=false&trim_place=false';
-document.getElementsByTagName('head')[0].appendChild(script);
-
-function tweet_actions(response) {
-  map.data.addGeoJson(response);
-} */
-
 var mapFilters = [
         {
             name : 'Grub',
             foursqCatId: '4d4b7105d754a06374d81259',
-            instafeedTagName : ['nolafood', 'eatnola', 'noladining', 'nolafoodies', 'nolaeats', 'frenchmarket', 'killerpoboys', 'coopsplace'],
-        //    imgSrc : 'img/felix.jpeg',
-        //    nicknames: ['Hi-Hat']
+            instafeedTagName : ['nolafood', 'eatnola', 'noladining', 'nolafoodies', 'nolaeats', 'frenchmarket', 'killerpoboys', 'coopsplace']
         },{
             name : 'Booze',
             foursqCatId : '4d4b7105d754a06376d81259',
-            instafeedTagName : ['nolacocktails', 'handgrenades', 'patobriens', 'erinrose', 'rooseveltbar'],
-        //    imgSrc : 'img/tom.jpg',
-        //    nicknames: ['Pokerface']
+            instafeedTagName : ['nolacocktails', 'handgrenades', 'patobriens', 'erinrose', 'rooseveltbar']
         },{
             name : 'Music',
             foursqCatId : '4bf58dd8d48988d1e5931735',
-            instafeedTagName : ['frenchmanstreet', 'preservationhall', 'nolamusic', 'nolajazzfest', ''],
-        //    imgSrc : 'img/bebop.jpg',
-        //    nicknames: ['Jumper']
+            instafeedTagName : ['frenchmanstreet', 'preservationhall', 'nolamusic', 'nolajazzfest']
         },{
             name : 'Festivals',
             foursqCatId : '4d4b7105d754a06373d81259',
-            instafeedTagName : ['frenchquarterfestival', 'bayouboogaloo', 'satchmofest', '', ''],
-        //    imgSrc : 'img/bebop.jpg',
-        //    nicknames: ['Jumper']
+            instafeedTagName : ['frenchquarterfestival', 'bayouboogaloo', 'satchmofest']
         },{
             name : 'Hoods',
             foursqCatId : '4f2a25ac4b909258e854f55f',
-            instafeedTagName : ['bywater', 'marigny', 'treme', 'frenchquarter', 'uptownnola', 'lower9th', 'poydrascorridor', 'gardendistrict'],
-        //    imgSrc : 'img/josi.jpg',
-        //    nicknames: ['Thimblelina']
+            instafeedTagName : ['bywater', 'marigny', 'treme', 'frenchquarter', 'uptownnola', 'lower9th', 'poydrascorridor', 'gardendistrict']
         },{
             name : 'Cemetaries',
             foursqCatId : '4bf58dd8d48988d15c941735',
-            instafeedTagName : 'nolacemetaries',
-        //    imgSrc : 'img/bebop.jpg',
-        //    nicknames: ['Jumper']
+            instafeedTagName : ['nolacemetaries']
         },{
             name : 'What\'s Crazy',
             foursqCatId : '4d4b7105d754a06373d81259',
-            instafeedTagName : ['nolabulls', 'reddressrunnola', 'neworleansburlesque', 'nola', 'nolamardigras'],
-        //    imgSrc : 'img/vicki.jpg',
-        //    nicknames: ['SexyBabe']
+            instafeedTagName : ['nolabulls', 'reddressrunnola', 'neworleansburlesque', 'nola', 'nolamardigras']
         }
              ]
 
 var Filter = function (data) {
-//    this.clickCount = ko.observable(data.clickCount);
     this.name = ko.observable(data.name);
-//    this.imgSrc = ko.observable(data.imgSrc);
+    this.foursqCatId = ko.observable(data.foursqCatId);
+    this.instafeedTagName = ko.observableArray(data.instafeedTagName);
 //    this.nicknames = ko.observableArray(data.nicknames);
 
 /*    this.title = ko.computed(function(){
@@ -155,6 +110,117 @@ var Filter = function (data) {
 */
 }
 
+// Build the FourSquare API Call
+var client_id = 'GDIGYUEJ2F35H1E3BQCCSZVNZEP2OAJBNOTD2BEVHL0IXF3O';
+var client_secret = 'HIO22Q3EXWKQ12YQ15NHN02X4L4V35NVP1C1GFEPGQ1C5WCW';
+var base_url = 'https://api.foursquare.com/v2/';
+var endpoint = 'venues/search?';
+var categoryId = '4d4b7105d754a06374d81259';
+var category = '&categoryId=' + categoryId;
+var intent = '&intent=browse';
+var radius = '&radius=1000';
+var limit = '&limit=15';
+var params = 'near=New+Orleans';
+var key = '&client_id=' + client_id + '&client_secret=' + client_secret + '&v=' + '20150301';
+var url = base_url+endpoint+params+category+intent+radius+limit+key;
+
+// Initialize Google Maps
+function init() {
+var mapOptions = {
+  center: new google.maps.LatLng(29.9500, -90.0667),
+  zoom: 14,
+  mapTypeControl: true,
+  mapTypeControlOptions: {
+    style: google.maps.MapTypeControlStyle.DEFAULT,
+  mapTypeIds: [
+    google.maps.MapTypeId.HYBRID,
+    google.maps.MapTypeId.ROADMAP
+  ]
+},
+zoomControl: true,
+zoomControlOptions: {
+  style: google.maps.ZoomControlStyle.SMALL
+}
+};
+var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
+
+//        setMarkers(center, radius, map);
+//      }
+
+//     function setMarkers(center, radius, map) {
+
+//     }
+
+// FourSquare return results for markers
+$.get(url, function (result) {
+  $('#msg pre').text(JSON.stringify(result));
+  
+  var markers = result.response.venues;
+  var infowindow = "hello";
+
+  setMarkers(markers);
+
+  for (var i in markers){
+    var place = markers[i];
+
+    // initialize infowindow
+    infowindow = new google.maps.InfoWindow({
+    content: "holding pattern..."
+    });
+
+    // add markers to map
+    var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(place.location.lat,place.location.lng),
+        map: map
+    });
+
+
+    // add event listener for marker click
+        google.maps.event.addListener(marker, 'click', function() {
+        infowindow.setContent(this.html);
+        infowindow.open(map, this);
+    });
+
+  }});
+
+  // Add FourSquare Marker Names to List
+  function setMarkers(venuesArr){  
+      for (var i in venuesArr){
+          var venue = venuesArr[i];
+          var str = '<p><strong>' + venue.name + '</strong> ' + '</p>';   
+       //   str += venue.location.lat + ',';
+       //   str += venue.location.lng;
+       //   str += '</p>';
+          $('#wikipedia-links').append(str);
+      }
+  }
+}
+
+google.maps.event.addDomListener(window, 'load', init);
+
+// Reverse Geocoding to Return City & State Names when we make it interactive
+var geocodingAPI = "https://maps.googleapis.com/maps/api/geocode/json?latlng=29.9500,-90.0667";
+
+$.getJSON(geocodingAPI, function (json) {
+  if (json.status == "OK") {
+      //Check result 0
+      var result = json.results[0];
+      //look for locality tag and administrative_area_level_1
+      var city = "";
+      var state = "";
+      for (var i = 0, len = result.address_components.length; i < len; i++) {
+          var ac = result.address_components[i];
+          if(ac.types.indexOf("locality") >= 0) city = ac.long_name;
+          if(ac.types.indexOf("administrative_area_level_1") >= 0) state = ac.long_name;
+        }
+      //only report if we got Good Stuff
+      if(city != '' && state != '') {
+        $("#city-name").html("Let's Explore the Beautiful City of "+city+", "+state+"!");
+        }
+      //    console.log("Let's Explore the Beautiful City of " + city + ", " + state + "!");
+ }
+})
+
 var ViewModel = function () {
     var self = this;
 
@@ -165,10 +231,6 @@ var ViewModel = function () {
     });
 
     this.currentFilter = ko.observable( this.filterList()[0]);
-
-    this.incrementCounter = function() {
-        this.clickCount(this.clickCount() + 1);
-    };
 
     this.setFilter = function(clickedFilter) {
         self.currentFilter(clickedFilter)

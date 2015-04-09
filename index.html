@@ -17,103 +17,6 @@
     <!-- EVENTUALLY USE API SCRIPT
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=API_KEY"-->
-    <script type="text/javascript">
-      // FourSquare API Call
-      var client_id = 'GDIGYUEJ2F35H1E3BQCCSZVNZEP2OAJBNOTD2BEVHL0IXF3O';
-      var client_secret = 'HIO22Q3EXWKQ12YQ15NHN02X4L4V35NVP1C1GFEPGQ1C5WCW';
-      var base_url = 'https://api.foursquare.com/v2/';
-      var endpoint = 'venues/search?';
-      var categoryId = '&categoryId=4d4b7105d754a06374d81259';
-      var query = '&query=food';
-      var intent = '&intent=browse';
-      var radius = '&radius=1000';
-
-      var params = 'near=New+Orleans';
-      var key = '&client_id=' + client_id + '&client_secret=' + client_secret + '&v=' + '20150301';
-      var url = base_url+endpoint+params+categoryId+query+intent+radius+key;
-
-      // Initialize Google Maps
-      function init() {
-        var mapOptions = {
-          center: new google.maps.LatLng(29.9500, -90.0667),
-          zoom: 14,
-          mapTypeControl: true,
-          mapTypeControlOptions: {
-            style: google.maps.MapTypeControlStyle.DEFAULT,
-          mapTypeIds: [
-            google.maps.MapTypeId.HYBRID,
-            google.maps.MapTypeId.ROADMAP
-          ]
-        },
-        zoomControl: true,
-        zoomControlOptions: {
-          style: google.maps.ZoomControlStyle.SMALL
-        }
-      };
-        var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
-
-//        setMarkers(center, radius, map);
-//      }
-
- //     function setMarkers(center, radius, map) {
-
- //     }
-
-      // FourSquare return results to variable
-      $.get(url, function (result) {
-          $('#msg pre').text(JSON.stringify(result));
-          
-          var venues = result.response.venues;
-
-          printVenues(venues); 
-
-          for (var i in venues){
-              var venue = venues[i];       
-              // place the a marker on the map
-              marker = new google.maps.Marker({
-                  position: new google.maps.LatLng(venue.location.lat,venue.location.lng),
-                  map: map
-                });
-          }});
-
-          // FourSquare Results to Array; Print to HTML
-          function printVenues(venuesArr){  
-              for (var i in venuesArr){
-                  var venue = venuesArr[i];
-                  var str = '<p><strong>' + venue.name + '</strong> ';   
-                  str += venue.location.lat + ',';
-                  str += venue.location.lng;
-                  str += '</p>';
-                  $('#display').append(str);
-              }
-          }
-        }
-
-      google.maps.event.addDomListener(window, 'load', init);
-
-      // Reverse Geocoding to Return City & State Names when we make it interactive
-      var geocodingAPI = "https://maps.googleapis.com/maps/api/geocode/json?latlng=29.9500,-90.0667";
-
-      $.getJSON(geocodingAPI, function (json) {
-          if (json.status == "OK") {
-              //Check result 0
-              var result = json.results[0];
-              //look for locality tag and administrative_area_level_1
-              var city = "";
-              var state = "";
-              for (var i = 0, len = result.address_components.length; i < len; i++) {
-                  var ac = result.address_components[i];
-                  if(ac.types.indexOf("locality") >= 0) city = ac.long_name;
-                  if(ac.types.indexOf("administrative_area_level_1") >= 0) state = ac.long_name;
-                }
-              //only report if we got Good Stuff
-              if(city != '' && state != '') {
-                $("#city-name").html("Let's Explore the Beautiful City of "+city+", "+state+"!");
-                }
-              //    console.log("Let's Explore the Beautiful City of " + city + ", " + state + "!");
-         }
-       })
-    </script>
   </head>
   <body>
     <div id="instafeed"></div>
@@ -121,23 +24,22 @@
       <header id="header">
         <h1><span id="city-name"></span></h1>
         <form id="form-container">
-          <input id="searchbar" type="text" placeholder="What would you like to see in this city? Or choose a filter to your left to begin!" autofocus>
+          <input id="searchbar" type="text" placeholder="What would you like to see in this city? Or choose a filter below!" autofocus>
         </form>
       </header>
     </section>
+      <div>
+        <ul data-bind="foreach: filterList" class="flex-box center-content">
+          <li data-bind="text: name, click: $parent.setFilter" class='flex-item'></li>
+        </ul>
+      </div>
       <div style="float:right">
-        <h3 id="wikipedia-header" class="wikipedia-container">Here's What's Hot!</h3>
-          <ul data-bind="foreach: filterList">
-              <li data-bind="text: name"><!-- later add a data-bind for click, $parent.setFilter to pass data to google maps & display only those types selected on map-->
-              </li>
-          </ul>
-          <h3 id="wikipedia-header" class="wikipedia-container">Relevant Wikipedia Links</h3>
+          <h3 id="wikipedia-header" class="wikipedia-container">Here's What's Hot!</h3>
           <ul id="wikipedia-links"></ul>
       </div>
       <div id="map-canvas" style="float:left"></div>
-      <div id="display" style="float:left"></div>
-      <div id="msg" style="display:none"><pre></pre></div>
     <script src="js/lib/knockout-3.3.0.js"></script>
+    <script src="js/lib/knockout.mapping.js"></script>
     <script src="js/lib/instafeed.min.js"></script>
     <script src="js/app.js"></script>
   </body>
