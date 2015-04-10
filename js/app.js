@@ -1,50 +1,7 @@
-// API Calls
-function loadData() {
-
-    var $wikiElem = $('#wikipedia-links');
-
-    // Clear Existing Data Before New Request
-    $wikiElem.text('');
-
-    // Assign Searchbar Value to Variable
-    var searchStr = $('#searchbar').val();
-
-    // Initiate Wikipedia AJAX Request
-    var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='
-                    + searchStr + '&format=json&callback=wikiCallback';
-
-    var wikiRequestTimeout = setTimeout(function() {
-        $wikiElem.text('Failed to get Wikipedia resources');
-    }, 8000);
-
-    $.ajax({
-        url: wikiUrl,
-        dataType: 'jsonp',
-
-        // Callback for JSONP
-        success: function(response) {
-            var articleList = response[1];
-
-            for (var i = 0; i < articleList.length; i++) {
-                articleStr = articleList[i];
-                var url = 'http://en.wikipedia.org/wiki/' + articleStr;
-                $wikiElem.append('<li><a href="' + url + '">'
-                    + articleStr + '</a></li>');
-            };
-
-            clearTimeout(wikiRequestTimeout);
-        }
-    });
-    return false;
-};
-
-// loadData();
-$('#form-container').submit(loadData);
-
-// Instafeed showing Instagram Pics
+// Instagram Pics from Instafeed API
 var feed = new Instafeed({
     get: 'tagged',
-    tagName: 'nolaarchitecture',
+    tagName: 'nola',
     target: 'instafeed',
     sortBy: 'most-recent',
     limit: 8,
@@ -53,6 +10,7 @@ var feed = new Instafeed({
 });
 feed.run();
 
+// Data Model for Map Categories and Filters
 var mapFilters = [
         {
             name : 'Grub',
@@ -89,40 +47,7 @@ var Filter = function (data) {
     this.name = ko.observable(data.name);
     this.foursqCatId = ko.observable(data.foursqCatId);
     this.instafeedTagName = ko.observableArray(data.instafeedTagName);
-//    this.nicknames = ko.observableArray(data.nicknames);
-
-/*    this.title = ko.computed(function(){
-        var title;
-        var clicks = this.clickCount();
-        if (clicks < 10) {
-            title = 'the Runt';
-        } else if (clicks < 20) {
-            title = 'the Kitten';
-        } else if (clicks < 30) {
-            title = 'the Kitty';
-        } else if (clicks < 40) {
-            title = 'the Cat';
-        } else {
-            title = 'the Guru';
-        }
-            return title;
-        }, this);
-*/
 }
-
-// Build the FourSquare API Call
-var client_id = 'GDIGYUEJ2F35H1E3BQCCSZVNZEP2OAJBNOTD2BEVHL0IXF3O';
-var client_secret = 'HIO22Q3EXWKQ12YQ15NHN02X4L4V35NVP1C1GFEPGQ1C5WCW';
-var base_url = 'https://api.foursquare.com/v2/';
-var endpoint = 'venues/search?';
-var categoryId = '4d4b7105d754a06374d81259';
-var category = '&categoryId=' + categoryId;
-var intent = '&intent=browse';
-var radius = '&radius=1000';
-var limit = '&limit=15';
-var params = 'near=New+Orleans';
-var key = '&client_id=' + client_id + '&client_secret=' + client_secret + '&v=' + '20150301';
-var url = base_url+endpoint+params+category+intent+radius+limit+key;
 
 // Initialize Google Maps
 function init() {
@@ -142,55 +67,67 @@ zoomControlOptions: {
   style: google.maps.ZoomControlStyle.SMALL
 }
 };
+
 var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
 
-//        setMarkers(center, radius, map);
-//      }
-
-//     function setMarkers(center, radius, map) {
-
-//     }
+// Build the FourSquare URL API Call
+var client_id = 'GDIGYUEJ2F35H1E3BQCCSZVNZEP2OAJBNOTD2BEVHL0IXF3O';
+var client_secret = 'HIO22Q3EXWKQ12YQ15NHN02X4L4V35NVP1C1GFEPGQ1C5WCW';
+var base_url = 'https://api.foursquare.com/v2/';
+var endpoint = 'venues/search?';
+var categoryId = '4d4b7105d754a06374d81259';
+var categoryName = 'Grub';
+var category = '&categoryId=' + categoryId;
+var intent = '&intent=browse';
+var radius = '&radius=1000';
+var limit = '&limit=15';
+var params = 'near=New+Orleans';
+var key = '&client_id=' + client_id + '&client_secret=' + client_secret + '&v=' + '20150301';
+var url = base_url+endpoint+params+category+intent+radius+limit+key;
 
 // FourSquare return results for markers
 $.get(url, function (result) {
-  $('#msg pre').text(JSON.stringify(result));
-  
-  var markers = result.response.venues;
-  var infowindow = "hello";
 
+  // Load the FourSquare Venue Results to Markers Variable
+  var markers = result.response.venues;
+
+  // Populate the List with Marker Location Names
   setMarkers(markers);
 
+  // Assign every Venue in Markers Array to a Place Variable
   for (var i in markers){
     var place = markers[i];
 
-    // initialize infowindow
-    infowindow = new google.maps.InfoWindow({
-    content: "holding pattern..."
+  // Assign Marker Variable to New Google Map Marker & Drop at Marker Position
+  var marker = new google.maps.Marker({
+    position: new google.maps.LatLng(place.location.lat,place.location.lng),
+    name: place.name,
+    address: place.location.address,
+    category: 'Grub',
+    likes: place.likes,
+    map: map
     });
 
-    // add markers to map
-    var marker = new google.maps.Marker({
-        position: new google.maps.LatLng(place.location.lat,place.location.lng),
-        map: map
-    });
+  // Initialize the InfoWindow in Google Maps
+  var infowindow = new google.maps.InfoWindow({
+        maxWidth: 160,
+        content: " "
+        });
 
+  // Add Event Listener for Marker Click, then Load InfoWindow Content from Array Variables
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.setContent('<div class="mapTitle">'+this.name+'</div>' + '<div class="mapHead"><div class="mapInfo">'+this.address+'</div>' + '<div class="mapHead"><div class="mapInfo">Best for: '+this.category+'</div>' +'</p></div>');
 
-    // add event listener for marker click
-        google.maps.event.addListener(marker, 'click', function() {
-        infowindow.setContent(this.html);
-        infowindow.open(map, this);
-    });
+    // Open InfoWindow with Content
+    infowindow.open(map, this);
+  });
+}});
 
-  }});
-
-  // Add FourSquare Marker Names to List
+  // Add FourSquare Marker Names to List View
   function setMarkers(venuesArr){  
       for (var i in venuesArr){
           var venue = venuesArr[i];
           var str = '<p><strong>' + venue.name + '</strong> ' + '</p>';   
-       //   str += venue.location.lat + ',';
-       //   str += venue.location.lng;
-       //   str += '</p>';
           $('#wikipedia-links').append(str);
       }
   }
@@ -203,8 +140,10 @@ var geocodingAPI = "https://maps.googleapis.com/maps/api/geocode/json?latlng=29.
 
 $.getJSON(geocodingAPI, function (json) {
   if (json.status == "OK") {
+      
       //Check result 0
       var result = json.results[0];
+      
       //look for locality tag and administrative_area_level_1
       var city = "";
       var state = "";
@@ -213,14 +152,15 @@ $.getJSON(geocodingAPI, function (json) {
           if(ac.types.indexOf("locality") >= 0) city = ac.long_name;
           if(ac.types.indexOf("administrative_area_level_1") >= 0) state = ac.long_name;
         }
+      
       //only report if we got Good Stuff
       if(city != '' && state != '') {
         $("#city-name").html("Let's Explore the Beautiful City of "+city+", "+state+"!");
         }
-      //    console.log("Let's Explore the Beautiful City of " + city + ", " + state + "!");
  }
 })
 
+// ViewModel
 var ViewModel = function () {
     var self = this;
 

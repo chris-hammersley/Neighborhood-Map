@@ -17,6 +17,7 @@ https://developers.google.com/maps/documentation/javascript/examples/marker-simp
 https://developers.google.com/maps/tutorials/
 http://snippetrepo.com/snippets/multiple-markers-using-json-with-google-maps-api
 http://you.arenot.me/2010/06/29/google-maps-api-v3-0-multiple-markers-multiple-infowindows/
+http://stackoverflow.com/questions/5137007/trying-to-display-infowindow-data-from-json-on-multiple-markers
 
 <strong>Reverse Geocoding for Place Names</strong>
 https://developers.google.com/maps/documentation/geocoding/#ReverseGeocoding
