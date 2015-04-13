@@ -144,7 +144,8 @@ input[type="checkbox"] {
 }
 
 #map-canvas {
-	height: 60%;
+	height: 400px;
+	width: 700px;
 }
 
 .mapTitle {
@@ -161,20 +162,12 @@ input[type="checkbox"] {
 }
 
 ul {
-  list-style-type: none;
-}
-
-#msg {
-    border:1px solid #333;
-    background-color:#ccc;
-    padding: 2em;
-    word-wrap: break-word;
-    margin-bottom: 2em;
-}
-
-#display {
-    padding:2em;
-    border: 1px solid #999;
+    -moz-column-count: 2;
+    -moz-column-gap: 7px;
+    -webkit-column-count: 2;
+    -webkit-column-gap: 7px;
+    column-count: 2;
+    column-gap: 7px;
 }
 
 #main {
@@ -296,10 +289,6 @@ hr {
 }
 
 .wikipedia-container {
-/*    float:right;
-    width:290px; */
-    padding:0px;
-    margin-right: 0px;
     background-color: rgba(255,255,255,0.7);
 }
 

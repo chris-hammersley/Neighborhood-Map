@@ -1,7 +1,12 @@
+// Global Variables
+var type = 'Grub'; // to change List results
+var tag = 'noladining'; // to change Instagram pictures
+var id = '4d4b7105d754a06374d81259'; // to change the FourSquare results
+
 // Instagram Pics from Instafeed API
 var feed = new Instafeed({
     get: 'tagged',
-    tagName: 'nola',
+    tagName: tag,
     target: 'instafeed',
     sortBy: 'most-recent',
     limit: 8,
@@ -43,17 +48,11 @@ var mapFilters = [
         }
              ]
 
-var Filter = function (data) {
-    this.name = ko.observable(data.name);
-    this.foursqCatId = ko.observable(data.foursqCatId);
-    this.instafeedTagName = ko.observableArray(data.instafeedTagName);
-}
-
 // Initialize Google Maps
 function init() {
 var mapOptions = {
   center: new google.maps.LatLng(29.9500, -90.0667),
-  zoom: 14,
+  zoom: 15,
   mapTypeControl: true,
   mapTypeControlOptions: {
     style: google.maps.MapTypeControlStyle.DEFAULT,
@@ -71,40 +70,40 @@ zoomControlOptions: {
 var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
 
 // Build the FourSquare URL API Call
-var client_id = 'GDIGYUEJ2F35H1E3BQCCSZVNZEP2OAJBNOTD2BEVHL0IXF3O';
-var client_secret = 'HIO22Q3EXWKQ12YQ15NHN02X4L4V35NVP1C1GFEPGQ1C5WCW';
-var base_url = 'https://api.foursquare.com/v2/';
-var endpoint = 'venues/search?';
-var categoryId = '4d4b7105d754a06374d81259';
-var categoryName = 'Grub';
-var category = '&categoryId=' + categoryId;
-var intent = '&intent=browse';
-var radius = '&radius=1000';
-var limit = '&limit=15';
-var params = 'near=New+Orleans';
-var key = '&client_id=' + client_id + '&client_secret=' + client_secret + '&v=' + '20150301';
-var url = base_url+endpoint+params+category+intent+radius+limit+key;
+// var client_id = 'GDIGYUEJ2F35H1E3BQCCSZVNZEP2OAJBNOTD2BEVHL0IXF3O';
+// var client_secret = 'HIO22Q3EXWKQ12YQ15NHN02X4L4V35NVP1C1GFEPGQ1C5WCW';
+// var base_url = 'https://api.foursquare.com/v2/venues/search?near=New+Orleans'; // TODO: make 'near' a variable that changes when a different city is selected
+// var catId = '4d4b7105d754a06374d81259';
+var catId = id;
+var category = '&categoryId=' + catId;
+// var params = '&intent=browse&radius=1000&limit=20'; // intent, radius and results limit
+// var key = '&client_id=' + client_id + '&client_secret=' + client_secret + '&v=' + '20150301';
+// var url = base_url+category+params+key;
+
+var foursquareApi = 'https://api.foursquare.com/v2/venues/search?near=New+Orleans' + category + '&intent=browse&radius=1000&limit=20&client_id=GDIGYUEJ2F35H1E3BQCCSZVNZEP2OAJBNOTD2BEVHL0IXF3O&client_secret=HIO22Q3EXWKQ12YQ15NHN02X4L4V35NVP1C1GFEPGQ1C5WCW&v=20150301';
 
 // FourSquare return results for markers
-$.get(url, function (result) {
+$.getJSON(foursquareApi, function (result) {
 
-  // Load the FourSquare Venue Results to Markers Variable
-  var markers = result.response.venues;
+  // Load the FourSquare Venue Results to Markers as Observable Array
+  var self = this;
+  self.allEntries = ko.observableArray([]);
+  self.allEntries = (result.response.venues);
+  // var markers = result.response.venues;
 
-  // Populate the List with Marker Location Names
-  setMarkers(markers);
+  // Call the setMarketList Function to Populate the List with Marker Location Names
+  setMarkerList(self.allEntries);
 
   // Assign every Venue in Markers Array to a Place Variable
-  for (var i in markers){
-    var place = markers[i];
+  for (var i in self.allEntries){
+    var place = self.allEntries[i];
 
   // Assign Marker Variable to New Google Map Marker & Drop at Marker Position
   var marker = new google.maps.Marker({
     position: new google.maps.LatLng(place.location.lat,place.location.lng),
     name: place.name,
     address: place.location.address,
-    category: 'Grub',
-    likes: place.likes,
+    category: type,
     map: map
     });
 
@@ -113,6 +112,9 @@ $.get(url, function (result) {
         maxWidth: 160,
         content: " "
         });
+
+// Make Markers an Observable Array
+// var markers = ko.observableArray([]);
 
   // Add Event Listener for Marker Click, then Load InfoWindow Content from Array Variables
   google.maps.event.addListener(marker, 'click', function() {
@@ -124,27 +126,27 @@ $.get(url, function (result) {
 }});
 
   // Add FourSquare Marker Names to List View
-  function setMarkers(venuesArr){  
+  function setMarkerList(venuesArr){  
       for (var i in venuesArr){
           var venue = venuesArr[i];
           var str = '<p><strong>' + venue.name + '</strong> ' + '</p>';   
-          $('#wikipedia-links').append(str);
+          $('#locations').append(str);
       }
   }
 }
 
 google.maps.event.addDomListener(window, 'load', init);
 
-// Reverse Geocoding to Return City & State Names when we make it interactive
-var geocodingAPI = "https://maps.googleapis.com/maps/api/geocode/json?latlng=29.9500,-90.0667";
+// Reverse Geocoding to Return City & State Names when I make it interactive for users to choose another city
+var geocodingAPI = "https://maps.googleapis.com/maps/api/geocode/json?latlng=29.9500,-90.0667"; // TODO: make 'latlng' a variable that changes when a new city is selected
 
 $.getJSON(geocodingAPI, function (json) {
   if (json.status == "OK") {
       
-      //Check result 0
+      //Check Results
       var result = json.results[0];
       
-      //look for locality tag and administrative_area_level_1
+      //Look for Locality and Administrative_area_level_1 Tags
       var city = "";
       var state = "";
       for (var i = 0, len = result.address_components.length; i < len; i++) {
@@ -153,16 +155,24 @@ $.getJSON(geocodingAPI, function (json) {
           if(ac.types.indexOf("administrative_area_level_1") >= 0) state = ac.long_name;
         }
       
-      //only report if we got Good Stuff
+      //Display the Welcome Line if Values aren't Null
       if(city != '' && state != '') {
         $("#city-name").html("Let's Explore the Beautiful City of "+city+", "+state+"!");
         }
  }
 })
 
+var Filter = function (data) {
+    this.name = ko.observable(data.name);
+    this.foursqCatId = ko.observable(data.foursqCatId);
+    this.instafeedTagName = ko.observableArray(data.instafeedTagName);
+};
+
 // ViewModel
 var ViewModel = function () {
     var self = this;
+
+    self.searchPhrase = ko.observable('');
 
     this.filterList = ko.observableArray([]);
 
@@ -175,6 +185,20 @@ var ViewModel = function () {
     this.setFilter = function(clickedFilter) {
         self.currentFilter(clickedFilter)
     };
-}
+
+//    this.changeResults = function() {
+//        self.currentFilter()
+//    };
+
+    self.searchPhrase.subscribe(function(newTerm) {
+      if (newTerm== '') return;
+      var latlon = app.map.getCenter();
+      app.getFoursquareResponse(
+        latlon.k, latlon.D,
+        newTerm,
+        app.processFoursquareResponse
+        );
+    });
+};
 
 ko.applyBindings(new ViewModel());

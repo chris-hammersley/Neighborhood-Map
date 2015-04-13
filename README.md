@@ -35,8 +35,9 @@ https://developer.foursquare.com/docs/venues/explore
 https://developer.foursquare.com/categorytree
 http://api.jquery.com/jQuery.getJSON/
 
-<strong>jQuery</strong>
+<strong>Knockout/JSON/jQuery</strong>
 http://api.jquery.com/val/
+http://knockoutjs.com/documentation/json-data.html
 
-<strong>Twitter</strong>
-https://dev.twitter.com/rest/reference/get/search/tweets
+<strong>CSS Tricks</strong>
+http://stackoverflow.com/questions/6509106/css-ways-to-break-list-into-columns-on-page

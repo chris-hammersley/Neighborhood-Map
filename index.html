@@ -5,13 +5,6 @@
     <title>Neighborhood Map - New Orleans (Udacity Project 5)</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/lib/jQuery.js"></script>
-    <style type="text/css">
-      #map-canvas {
-        height: 500px;
-        width: 800px;
-      }
-    </style>
-
     <script type="text/javascript"
         src="http://www.google.com/jsapi?autoload={'modules':[{name:'maps',version:3,other_params:''}]}"></script>
     <!-- EVENTUALLY USE API SCRIPT
@@ -24,7 +17,7 @@
       <header id="header">
         <h1><span id="city-name"></span></h1>
         <form id="form-container">
-          <input id="searchbar" type="text" placeholder="What would you like to see in this city? Or choose a filter below!" autofocus>
+          <input id="searchbar" type="text" data-bind="value: searchPhrase" placeholder="What would you like to see in this city? Or choose a filter below!" autofocus>
         </form>
       </header>
     </section>
@@ -33,9 +26,9 @@
           <li data-bind="text: name, click: $parent.setFilter" class='flex-item'></li>
         </ul>
       </div>
-      <div style="float:right">
-          <h3 id="wikipedia-header" class="wikipedia-container">Here's What's Hot!</h3>
-          <ul id="wikipedia-links"></ul>
+      <div data-bind="with: currentFilter" style="float:right">
+          <h4>Here's What <span data-bind="text: name"></span> is Hot!</h4>
+          <ul id="locations"></ul>
       </div>
       <div id="map-canvas" style="float:left"></div>
     <script src="js/lib/knockout-3.3.0.js"></script>
