@@ -70,8 +70,8 @@ zoomControlOptions: {
 var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
 
 // Build the FourSquare URL API Call
-// var client_id = 'GDIGYUEJ2F35H1E3BQCCSZVNZEP2OAJBNOTD2BEVHL0IXF3O';
-// var client_secret = 'HIO22Q3EXWKQ12YQ15NHN02X4L4V35NVP1C1GFEPGQ1C5WCW';
+// var client_id = '';
+// var client_secret = '';
 // var base_url = 'https://api.foursquare.com/v2/venues/search?near=New+Orleans'; // TODO: make 'near' a variable that changes when a different city is selected
 // var catId = '4d4b7105d754a06374d81259';
 var catId = id;
@@ -80,7 +80,7 @@ var category = '&categoryId=' + catId;
 // var key = '&client_id=' + client_id + '&client_secret=' + client_secret + '&v=' + '20150301';
 // var url = base_url+category+params+key;
 
-var foursquareApi = 'https://api.foursquare.com/v2/venues/search?near=New+Orleans' + category + '&intent=browse&radius=1000&limit=20&client_id=GDIGYUEJ2F35H1E3BQCCSZVNZEP2OAJBNOTD2BEVHL0IXF3O&client_secret=HIO22Q3EXWKQ12YQ15NHN02X4L4V35NVP1C1GFEPGQ1C5WCW&v=20150301';
+var foursquareApi = 'https://api.foursquare.com/v2/venues/search?near=New+Orleans' + category + '&intent=browse&radius=1000&limit=20&client_id=&client_secret=&v=20150301';
 
 // FourSquare return results for markers
 $.getJSON(foursquareApi, function (result) {
