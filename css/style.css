@@ -16,7 +16,7 @@ body {
   z-index: 105;
   position: fixed;
   top: 10px;
-  left: 15px;
+  left: 160px;
   height: 0px;
   background-color: #FFFFFF;
 }
@@ -221,11 +221,10 @@ body {
 
 #instafeed {
   text-align: center;
-  z-index: 103;
+  z-index: 100;
   position: fixed;
   padding-left: 5px;
-  top: 650px;
-  left: 100px;
+  top: 10px;
 }
 
 .infowindow {
@@ -239,8 +238,8 @@ body {
   box-shadow: 0 2px 6px rgba(0,0,0,0.3);
   border-radius: 3px;
   z-index: 102;
-  position: fixed;
-  top: 130px;
+  position: absolute;
+  top: 125px;
   left: 15px;
   background-color: #FFFFFF;
 }
@@ -249,7 +248,7 @@ body {
   font-size: 13px;
   list-style: none;
   max-width: 300px;
-  height: 300px;
+  height: 350px;
   overflow-x: hidden;
   overflow-y: auto;
   margin: 0;
@@ -344,7 +343,7 @@ hr {
 
 .no-result {
   position: fixed;
-  top: 380px;
+  top: 220px;
   left: 30px;
   color: #9E9E9E;
 }
@@ -352,13 +351,18 @@ hr {
 /* Responsive Design */
 @media (max-width: 900px) {
 
+.header {
+  left: 5px;
+  box-shadow: 0 0px 0px rgba(0,0,0,0);
+}
+
 #title {
-  margin: 30px 0 0px 0;
+  margin: 0px 0 0px 0;
 }
 
 #title h1 {
-  top: -5px;
-  font-size: 1.4em;
+  top: 0px;
+  font-size: 1.3em;
 }
 
 #venueList {
@@ -366,9 +370,7 @@ hr {
 }
 
 .searchbar {
-  top: 180px;
-  clear: left;
-  right: 30px;
+  display: none;
 }
 
 #instafeed {
