@@ -4,36 +4,32 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <title>Neighborhood Map - New Orleans (Udacity Project 5)</title>
     <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
     <script src="js/lib/jQuery.js"></script>
-    <script type="text/javascript"
-        src="http://www.google.com/jsapi?autoload={'modules':[{name:'maps',version:3,other_params:''}]}"></script>
-    <!-- EVENTUALLY USE API SCRIPT
-    <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=API_KEY"-->
   </head>
   <body>
     <div id="instafeed"></div>
-    <section id="title">
-      <header id="header">
+      <header id="title">
         <h1><span id="city-name"></span></h1>
-        <form id="form-container">
-          <input id="searchbar" type="text" data-bind="value: searchPhrase" placeholder="What would you like to see in this city? Or choose a filter below!" autofocus>
+        <form id="container">
+          <input id="searchbar" data-bind="value: searchterm" placeholder="Search for Grub Here!" autofocus><button class="searchButton">SEARCH</button>
         </form>
       </header>
-    </section>
-      <div>
+    <div id="map-canvas"></div>
+      <!--div> TODO: add filter types
         <ul data-bind="foreach: filterList" class="flex-box">
           <li data-bind="text: name, click: $parent.setFilter" class='flex-item'></li>
         </ul>
+      </div-->
+      <div id="container">
+          <h4>Here's What Grub Spots are Hot!</h4>
+          <ul id="locations" class="locations" data-bind="foreach: filteredList">
+            <li data-bind="click: $root.showMarker"><span data-bind="text: venue.categories[0].name"</span></li>
+          </ul>
       </div>
-      <div data-bind="with: currentFilter" style="float:right">
-          <h4>Here's What <span data-bind="text: name"></span> is Hot!</h4>
-          <ul id="locations"></ul>
-      </div>
-      <div id="map-canvas" style="float:left"></div>
     <script src="js/lib/knockout-3.3.0.js"></script>
     <script src="js/lib/knockout.mapping.js"></script>
     <script src="js/lib/instafeed.min.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/main-app.js"></script>
   </body>
 </html>

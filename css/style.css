@@ -1,41 +1,21 @@
 html,
 body {
+	height: 100%;
 	margin: 0;
 	padding: 0;
-}
-
-button {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	background: none;
-	font-size: 100%;
-	vertical-align: baseline;
-	font-family: inherit;
-	color: inherit;
-	-webkit-appearance: none;
-	-ms-appearance: none;
-	-o-appearance: none;
-	appearance: none;
 }
 
 body {
 	font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	line-height: 1.4em;
-/*	background: #eaeaea url('bg.png'); */
 	color: #4d4d4d;
-	width: 1200px;
+	width: 90%;
 	margin: 0 auto;
 	-webkit-font-smoothing: antialiased;
 	-moz-font-smoothing: antialiased;
 	-ms-font-smoothing: antialiased;
 	-o-font-smoothing: antialiased;
 	font-smoothing: antialiased;
-}
-
-button,
-input[type="checkbox"] {
-  outline: none;
 }
 
 #title {
@@ -72,7 +52,7 @@ input[type="checkbox"] {
 
 #title h1 {
 	position: absolute;
-	top: -80px;
+	top: -60px;
 	width: 100%;
 	font-size: 40px;
 	font-weight: bold;
@@ -102,10 +82,6 @@ input[type="checkbox"] {
 	z-index: 2;
 	border-bottom: 1px solid #6c615c;
 	background: #8d7d77;
-	background: -webkit-gradient(linear, left top, left bottom, from(rgba(132, 110, 100, 0.8)),to(rgba(101, 84, 76, 0.8)));
-	background: -webkit-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
-	background: linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
-	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#9d8b83', EndColorStr='#847670');
 	border-top-left-radius: 1px;
 	border-top-right-radius: 1px;
 }
@@ -113,8 +89,7 @@ input[type="checkbox"] {
 #searchbar,
 .edit {
 	position: relative;
-	margin: 0;
-	width: 100%;
+	margin: 10px;
 	font-size: 24px;
 	font-family: inherit;
 	line-height: 1.4em;
@@ -123,29 +98,30 @@ input[type="checkbox"] {
 	color: inherit;
 	padding: 6px;
 	border: 1px solid #999;
-	box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
-	-moz-box-sizing: border-box;
-	-ms-box-sizing: border-box;
-	-o-box-sizing: border-box;
-	box-sizing: border-box;
-	-webkit-font-smoothing: antialiased;
-	-moz-font-smoothing: antialiased;
-	-ms-font-smoothing: antialiased;
-	-o-font-smoothing: antialiased;
-	font-smoothing: antialiased;
 }
 
 #searchbar {
 	padding: 8px 8px 8px 8px;
 	border: none;
-/*	background: rgba(0, 0, 0, 0.02); */
 	z-index: 2;
 	box-shadow: none;
 }
 
 #map-canvas {
-	height: 400px;
-	width: 700px;
+	height: 100%;
+	width: 100%;
+/*	float: left;
+	margin: 10px; */
+}
+
+#instafeed {
+	text-align: center;
+}
+
+#container {
+	width: 30%;
+	float: right;
+	height: 100%;
 }
 
 .mapTitle {
@@ -239,30 +215,24 @@ ul {
 	Can't use it globally since it destroys checkboxes in Firefox and Opera
 */
 
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-	#toggle-all,
-	#todo-list li .toggle {
-		background: none;
-	}
+/* Smartphone Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2) {
 
-	#todo-list li .toggle {
-		height: 40px;
-	}
-
-	#toggle-all {
-		top: -56px;
-		left: -15px;
-		width: 65px;
-		height: 41px;
-		-webkit-transform: rotate(90deg);
-		transform: rotate(90deg);
-		-webkit-appearance: none;
-		appearance: none;
-	}
+ul {
+    -moz-column-count: 1;
+    -moz-column-gap: 7px;
+    -webkit-column-count: 1;
+    -webkit-column-gap: 7px;
+    column-count: 1;
+    column-gap: 7px;
 }
 
-.hidden {
-	display: none;
+#container {
+	clear: both;
+
 }
 
 hr {
@@ -272,7 +242,12 @@ hr {
 	border-bottom: 1px dashed #F7F7F7;
 }
 
-@media (min-width: 899px) {
+/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+
 	.learn-bar {
 		width: auto;
 		margin: 0 0 0 300px;
@@ -286,22 +261,5 @@ hr {
 		width: 550px;
 		margin: 130px auto 40px auto;
 	}
-}
 
-.wikipedia-container {
-    background-color: rgba(255,255,255,0.7);
-}
-
-.article-list {
-    margin: 0;
-    padding: 0;
-}
-
-.article {
-    list-style-type: none;
-    padding:10px;
-    border-top: 1px solid #CCC;
-}
-.article:first-child {
-    border-top:none;
 }
