@@ -47,7 +47,8 @@ var neighborhoods = [
         value : 'Uptown, New Orleans',
         tagIG : 'uptownnola'
     }
-    ]; END VERSION 2 -->
+    ];
+=== END VERSION 2 TODO -->
 
 /* === TODO for version 3, create venue type selector using FourSquare catID to change between food, music, bars, etc. ===/
 
@@ -66,16 +67,17 @@ var venueTypes = [
         name : 'Festivals',
         foursqCatId : '4d4b7105d754a06373d81259'
     }
-    ];  END VERSION 3 */
+    ];
+=== END VERSION 3 TODO */
 
 /* ======= ViewModel ======= */
-// Function that makes the Neighborhood array values Observable
+/* Function that makes the Neighborhood array values Observable
 var Hood = function (data) {
     this.name = ko.observable(data.name);
     this.value = ko.observable(data.value);
-};
+}; */
 
-// Function to Set Up the Google Map ViewModel
+// Set Up the Google Map ViewModel
 function MapViewModel() {
   var self = this;
   var map;
@@ -88,12 +90,12 @@ function MapViewModel() {
   var defaultNeighborhood = 'Marigny, New Orleans'; // Sets Default Map Location
   var catId = "4d4b7105d754a06374d81259"; // Category of FourSquare Venue Results
   var locationLimit = 30; // Number of Venue Results returned from FourSquare
-  var tagIG = 'nolafoodie'; // Instagram Tag to Retrieve IG Images from Instafeed
+  var tagIG = 'noladining'; // Instagram Tag to Retrieve IG Images from Instafeed
 
   self.venueResults = ko.observableArray([]); // Venue List Results returned from FourSquare query
   self.filteredList = ko.observableArray(self.venueResults()); // Venue List Results filtered by Searchterm
-  self.neighborhood = ko.observable(defaultNeighborhood); // Neighborhood value to set Google Map location
-  self.searchterm = ko.observable(''); // Initial Searchterm placeholder that is used to filter Venue List
+  self.neighborhood = ko.observable(defaultNeighborhood); // Neighborhood Value to use with Markers
+  self.searchterm = ko.observable(''); // Observable Searchterm to filter Venue List
 
   // Setup Instafeed API to return Most-Recent Instagram Pictures based on Tag
   var feed = new Instafeed({
@@ -101,7 +103,7 @@ function MapViewModel() {
       tagName: tagIG,
       target: 'instafeed',
       sortBy: 'most-recent',
-      limit: 5,
+      limit: 8,
       template: '<a href="{{link}}" target="_blank"><img src="{{image}}" /></a><br />',
       clientId: 'ecdea4ae8c6f476a9a84e4a47d999170'
   });
@@ -196,17 +198,15 @@ function MapViewModel() {
   // Function to Initialize the Google Map
   function initializeMap() {
     var mapOptions = {
-      mapTypeControl: true,
       disableDefaultUI: true,
-      zoomControl: true,
-      zoomControlOptions: {
-        style: google.maps.ZoomControlStyle.DEFAULT,
-        position: google.maps.ControlPosition.RIGHT_BOTTOM
-      },
     };
+    if (window.google === undefined) {
+      var errorPage = document.getElementById('error');
+      error.style.display = 'block';
+    } else {
     map = new google.maps.Map(document.querySelector('#map-canvas'), mapOptions);
     infowindow = new google.maps.InfoWindow();
-  }
+  }};
 
   // Add the Neighborhood Markers based on FourSquare Venue Results to Google Map
   function getNeighborhoodInformation(placeData) {
@@ -231,19 +231,24 @@ function MapViewModel() {
     });
 
     // Return FourSquare Venues based on Category & Map Location from FourSquare API
+    // Used variables to allow for scalable feature set in later versions
     foursquareBaseURL = "https://api.foursquare.com/v2/venues/explore?ll=";
     initialLatLng = lat + ", " + lng;
     category = "&categoryId=" + catId;
     limit = "&limit=" + locationLimit;
     authorization = "&oauth_token=HG5IOTFR2QGYTMJNHNEW32TL4VISFRKBE1LKS0AXT4SYLDOW&v=20150301";
+    
+    // Compile FourSquare API Request String based on Variables
     foursquareApiQuery = foursquareBaseURL + initialLatLng + category + limit + authorization;
+
+    // API Request to FourSquare; Venue Results Create Google Map Markers
     $.getJSON(foursquareApiQuery, function(data) {
       self.venueResults(data.response.groups[0].items);
       for (var i in self.venueResults()) {
         createMarkers(self.venueResults()[i].venue);
       }
 
-      // Maximize the Display Zoom Level of Google Map
+      // Maximize the Display Zoom Level of Google Map based on FourSquare Result Set
       var bounds = data.response.suggestedBounds;
       if (bounds != undefined) {
         mapBounds = new google.maps.LatLngBounds(
@@ -289,11 +294,21 @@ function MapViewModel() {
     var category = venue.categories[0].name;
     var position = new google.maps.LatLng(lat, lng);
     var address = venue.location.address; // Displays Street Address
-    var xStreet = venue.location.crossStreet; // Displays nearest Cross Street
-    var contact = venue.contact.formattedPhone;
+    var xStreet = venue.location.crossStreet; // Displays Cross Street
+    var contact;
+    if (venue.contact.formattedPhone === undefined) {
+      contact = 'Oops, no phone!'; // Error Handling when Phone is Undefined
+    } else {
+      contact = venue.contact.formattedPhone;
+    }
     var foursquareUrl = "https://foursquare.com/v/" + venue.id;
     var rating = venue.rating; // Displays Venue Rating
-//    var status = venue.hours.status; // Displays if Venue is Open or Closed
+    var status; // Displays Current Open or Closed Status
+    if (venue.hours === undefined) {
+      status = '<b>Open? Closed?</b> Maybe you should call...' + contact; // Error Handling when Venue Hours are Undefined
+      } else {
+      status = venue.hours.status; // Displays if Venue is Open or Closed
+      }
     var url = venue.url;
     var slicedUrl;
     if (url && url.slice(0, 7) === 'http://') {
@@ -304,7 +319,7 @@ function MapViewModel() {
       slicedUrl = url;
     }
 
-    // Place FourSquare Venues into Map Markers
+    // Place FourSquare Venue Details into Map Markers
     var marker = new google.maps.Marker({
       map: map,
       icon: 'http://maps.google.com/mapfiles/ms/icons/purple-dot.png',
@@ -330,24 +345,23 @@ function MapViewModel() {
     var section3;
     if (xStreet != undefined) {
       section3 = '<p><em>Grub Type: </em><span>' + category +
-      '</span></p><p><span>' + address  + ' (' + xStreet + ')</span></p>';
+      '</span></p><p><span>' + address  + ' (' + xStreet + ')</span></p>'; // Error Handling when Cross Street is Undefined
     } else {
       section3 = '<p><em>Grub Type: </em><span>' + category +
       '</span></p><p><span>' + address  + '</span></p>';
     }
 
     // Section 4 shows if the Venue is Open or Closed if available
-    // Not using at the moment
     var section4;
-    if (status != undefined) {
-      section4 = '<b>' + status + '</b>';
+    if (status === undefined) {
+      section4 = '<b>Open? Closed?</b> Maybe you should call...' + contact; // Error Handling when Venue Hours are Undefined
     } else {
-      section4 = '';
+      section4 = '<b>' + status + '</b>';
     }
 
     // Set the Infowindow with FourSquare Venue Content when Marker is Clicked
     google.maps.event.addListener(marker, 'click', function() {
-      infowindow.setContent(section1 + section2 + section3);
+      infowindow.setContent(section1 + section2 + section3 + section4);
       infowindow.open(map, this);
       map.panTo(position);
     });

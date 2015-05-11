@@ -13,6 +13,12 @@
     <script src="js/app.js"></script>
   </head>
   <body>
+    <!-- Error Handling for Non Existent Google API with App Color Scheme -->
+    <div id="error">
+      <h1>Connection Error 418</h1>
+      <h3>Google Maps is Currently Unavailable. Check your connection and try again. Please don't brew coffee in a tea pot.</h3>
+      <h4>Did you know that you can look for Creole food in New Orleans? Try it when your connection to Google Maps has been restored!</h4>
+    </div>
     <div id="instafeed"></div>
     <div id="map-canvas"></div>
     <header id="title" class="header">
@@ -31,11 +37,11 @@
     </div>
     END TODO -->
     <div class="searchbar">
-      <input data-bind="value: searchterm" class="search-area" placeholder="Search for Grub Here!">
+      <input data-bind="value: searchterm" class="search-area" placeholder="Filter by Name/Type">
       <button class="search-button"></button>
     </div>
     <div id="venueList">
-      <div class="list-title"><h3>Here's What Grub Spots are Hot!</h3></div>
+      <div class="list-title"><h4>Hot Grub Spots!</h4></div>
       <div>
         <ul class="venues" data-bind="foreach: filteredList">
           <li data-bind="click: $root.clickMarker">
