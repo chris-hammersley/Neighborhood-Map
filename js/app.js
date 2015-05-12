@@ -8,16 +8,18 @@
 
 // Function that creates the basic info necessary to populate Map Markers
 var MapMarkerSet = function(marker, name, category, position) {
-  this.marker = marker,
-  this.name = name,
-  this.category = category,
-  this.position = position
+  "use strict";
+  this.marker = marker;
+  this.name = name;
+  this.category = category;
+  this.position = position;
 };
 
-/* === TODO for version 2, create neighborhood selector and change Instagram images by neighborhood ===/
+// TODO: create neighborhood selector
+// TODO: change Instagram images by neighborhood
 
-// Array of New Orleans neighborhoods
-var neighborhoods = [
+/* Array of New Orleans neighborhoods
+  var neighborhoods = [
     {
         name : 'French Quarter', 
         value : 'French Quarter, New Orleans',
@@ -47,12 +49,12 @@ var neighborhoods = [
         value : 'Uptown, New Orleans',
         tagIG : 'uptownnola'
     }
-    ];
-=== END VERSION 2 TODO -->
+  ];
+*/
 
-/* === TODO for version 3, create venue type selector using FourSquare catID to change between food, music, bars, etc. ===/
+// TODO: create venue type selector using FourSquare catID
 
-// Array of FourSquare Venue Types
+/* Array of FourSquare Venue Types
 var venueTypes = [
     {
         name : 'Grub Spots',
@@ -67,15 +69,19 @@ var venueTypes = [
         name : 'Festivals',
         foursqCatId : '4d4b7105d754a06373d81259'
     }
-    ];
-=== END VERSION 3 TODO */
+  ];
+*/
 
 /* ======= ViewModel ======= */
-/* Function that makes the Neighborhood array values Observable
+
+// TODO: select neighborhood names to change location
+
+/* Make Neighborhood Array Values Observable
 var Hood = function (data) {
     this.name = ko.observable(data.name);
     this.value = ko.observable(data.value);
-}; */
+  };
+*/
 
 // Set Up the Google Map ViewModel
 function MapViewModel() {
@@ -97,7 +103,7 @@ function MapViewModel() {
   self.neighborhood = ko.observable(defaultNeighborhood); // Neighborhood Value to use with Markers
   self.searchterm = ko.observable(''); // Observable Searchterm to filter Venue List
 
-  // Setup Instafeed API to return Most-Recent Instagram Pictures based on Tag
+  // Setup Instafeed API to fetch Images based on IG Tag
   var feed = new Instafeed({
       get: 'tagged',
       tagName: tagIG,
@@ -109,7 +115,9 @@ function MapViewModel() {
   });
   feed.run();
 
-/* === TODO for version 2 
+// TODO: change neighborhoods when new name selected
+
+/* 
   //  var defaultNeighborhood = neighborhoods[1].value; // Use to change neighborhoods
 
   // Set neighborhoodList as an Observable Array // This is the Neighborhood Selection list on Map
@@ -129,7 +137,7 @@ function MapViewModel() {
   };
 
   console.log(defaultNeighborhood)
-  === END VERSION 2 TODO */
+*/
 
   // Set Google Map Size based on Browser Window
   self.mapSize = ko.computed(function() {
@@ -141,7 +149,7 @@ function MapViewModel() {
 
   // Update the Neighborhood Map Markers from FourSquare Venues that don't match Searchterm
   self.computedNeighborhood = ko.computed(function() {
-    if (self.neighborhood() != '') {
+    if (self.neighborhood() !== '') {
       if (venueMarkers.length > 0) {
         removeVenueMarkers();
       }
@@ -168,12 +176,13 @@ function MapViewModel() {
     var list = [];
     var searchterm = self.searchterm().toLowerCase();
     for (var i in self.venueResults()) {
+//      if (self.venueResults.hasOwnProperty(i)) {
       venue = self.venueResults()[i].venue;
       if (venue.name.toLowerCase().indexOf(searchterm) != -1 ||
         venue.categories[0].name.toLowerCase().indexOf(searchterm) != -1) {
         list.push(self.venueResults()[i]);
-      }
-    }
+//      }
+    }}
     self.filteredList(list);
   });
 
@@ -185,14 +194,15 @@ function MapViewModel() {
   // Filter Map Markers by Searchterm
   function filteringMarkersBy(searchterm) {
     for (var i in venueMarkers) {
+//      if (venueMarkers.hasOwnProperty(i)) {
       if (venueMarkers[i].marker.map === null) {
         venueMarkers[i].marker.setMap(map);
       }
       if (venueMarkers[i].name.indexOf(searchterm) === -1 &&
         venueMarkers[i].category.indexOf(searchterm) === -1) {
         venueMarkers[i].marker.setMap(null);
-      }
-    }
+//      }
+    }}
   }
 
   // Function to Initialize the Google Map
@@ -206,7 +216,7 @@ function MapViewModel() {
     } else {
     map = new google.maps.Map(document.querySelector('#map-canvas'), mapOptions);
     infowindow = new google.maps.InfoWindow();
-  }};
+  }}
 
   // Add the Neighborhood Markers based on FourSquare Venue Results to Google Map
   function getNeighborhoodInformation(placeData) {
@@ -230,8 +240,9 @@ function MapViewModel() {
       infowindow.open(map, marker);
     });
 
+    // TODO: allow user to change the venue category and number of venues shown with on page selectors
+
     // Return FourSquare Venues based on Category & Map Location from FourSquare API
-    // Used variables to allow for scalable feature set in later versions
     foursquareBaseURL = "https://api.foursquare.com/v2/venues/explore?ll=";
     initialLatLng = lat + ", " + lng;
     category = "&categoryId=" + catId;
@@ -245,12 +256,14 @@ function MapViewModel() {
     $.getJSON(foursquareApiQuery, function(data) {
       self.venueResults(data.response.groups[0].items);
       for (var i in self.venueResults()) {
+//        if (self.venueResults.hasOwnProperty(i)) {
         createMarkers(self.venueResults()[i].venue);
-      }
+//      }
+    }
 
       // Maximize the Display Zoom Level of Google Map based on FourSquare Result Set
       var bounds = data.response.suggestedBounds;
-      if (bounds != undefined) {
+      if (bounds !== undefined) {
         mapBounds = new google.maps.LatLngBounds(
           new google.maps.LatLng(bounds.sw.lat, bounds.sw.lng),
           new google.maps.LatLng(bounds.ne.lat, bounds.ne.lng));
@@ -262,7 +275,7 @@ function MapViewModel() {
   // Callback Function to return Neighborhood Location if service is working
   function neighborhoodCallback(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
-      getNeighborhoodInformation(results[0])
+      getNeighborhoodInformation(results[0]);
     }
   }
 
@@ -278,9 +291,11 @@ function MapViewModel() {
   // Remove Neighborhood Marker from Map
   function removeNeighborhoodMarker() {
     for (var i in neighborhoodMarkers) {
+//      if (neighborhoodMarkers.hasOwnProperty(i)) {
       neighborhoodMarkers[i].setMap(null);
       neighborhoodMarkers[i] = null;
-    }
+//    }
+  }
     while (neighborhoodMarkers.length > 0) {
       neighborhoodMarkers.pop();
     }
@@ -330,11 +345,11 @@ function MapViewModel() {
 
     // Add FourSquare Venue Details to Map Marker Infowindow
     // Section 1 shows the Venue Name (venue name can be filtered with searchterm)
-    var section1 = '<div id="iw-container" class="infowindow"><p><span class="iw-title">' + name + '</span></p></div>'
+    var section1 = '<div id="iw-container" class="infowindow"><p><span class="iw-title">' + name + '</span></p></div>';
       
     // Section 2 shows the Venue 'Hotness' Rating if available
     var section2;
-    if (rating != undefined) {
+    if (rating !== undefined) {
       section2 = '<p><strong>Hotness Rating:</strong> <span class="v-rating">' + rating.toFixed(1) + '</span></p>';
     } else {
       section2 = '<p><span class="v-rating"><em>not available</em></span></p>';
@@ -343,7 +358,7 @@ function MapViewModel() {
     // Section 3 shows the Venue Type, Address & Cross Street if available (venue type can be filtered with searchterm; i.e. creole, american, bakery, diner, etc.)
     // TODO - allow for dynamic venue types based on values in neighborhoods array
     var section3;
-    if (xStreet != undefined) {
+    if (xStreet !== undefined) {
       section3 = '<p><em>Grub Type: </em><span>' + category +
       '</span></p><p><span>' + address  + ' (' + xStreet + ')</span></p>'; // Error Handling when Cross Street is Undefined
     } else {
@@ -370,9 +385,11 @@ function MapViewModel() {
   // Function to Remove Venue Map Markers
   function removeVenueMarkers() {
     for (var i in venueMarkers) {
+//      if (venueMarkers.hasOwnProperty(i)) {
       venueMarkers[i].marker.setMap(null);
       venueMarkers[i].marker = null;
-    }
+//    }
+  }
     while (venueMarkers.length > 0) {
       venueMarkers.pop();
     }
@@ -385,29 +402,76 @@ function MapViewModel() {
   });
 }
 
+// TODO: allow users to choose another city by making latlng a variable based on new city selection
+
 // Reverse Geocoding API to Return City & State Names
-// TODO - allow users to choose another city by making latlng a variable based on new city selection
 var geocodingAPI = "https://maps.googleapis.com/maps/api/geocode/json?latlng=29.9500,-90.0667";
 
+function reverseGeoCityName() {
+  $.getJSON(geocodingAPI, function (json) {
+      if (json.status !== 'OK') {
+        var result = json.results[0];
+    
+        //Look for Locality (city) and Administrative_area_level_1 (state) Tags
+        var city = "";
+        var state = "";
+        for (var i = 0, len = result.address_components.length; i < len; i++) {
+            var ac = result.address_components[i];
+            if(ac.types.indexOf("locality") >= 0) city = ac.long_name;
+            if(ac.types.indexOf("administrative_area_level_1") >= 0) state = ac.long_name;
+        }
+        
+        //Display the Welcome Line if Values aren't Null
+        if(city !== '' && state !== '') {
+          $("#city-name").html("Explore Food in " + city + "!");
+        }
+      }
+  });
+}
+
+function URLStatusCheck(geocodingAPI) {
+  $.ajax(geocodingAPI, {
+    contentType: "application/json; charset=utf-8",
+    dataType: 'json',
+    crossDomain: false,
+  })
+    .done(function(data, textStatus, jqXHR) {
+ //   alert("success");
+    reverseGeoCityName();
+  })
+    .error(function (jqXHR, textStatus, errorThrown) {
+//    alert("error");
+    $("#city-name").html("Explore Local Cuisine!");
+  })
+    .always(function () {
+  });
+}
+
+URLStatusCheck();
+
+/*
 $.getJSON(geocodingAPI, function (json) {
-  if (json.status == "OK") {
+  if (json.status !== 'OK') {
+    $("#city-name").html("Explore Local Cuisine!");
+ } else {
       var result = json.results[0];
       
-      //Look for Locality and Administrative_area_level_1 Tags which is where City & State are specified
+      //Look for Locality (city) and Administrative_area_level_1 (state) Tags
       var city = "";
       var state = "";
       for (var i = 0, len = result.address_components.length; i < len; i++) {
           var ac = result.address_components[i];
           if(ac.types.indexOf("locality") >= 0) city = ac.long_name;
           if(ac.types.indexOf("administrative_area_level_1") >= 0) state = ac.long_name;
-        }
+      }
       
       //Display the Welcome Line if Values aren't Null
-      if(city != '' && state != '') {
+      if(city !== '' && state !== '') {
         $("#city-name").html("Explore Food in " + city + "!");
-        }
- }
-})
+      }
+    }
+  });
+*/
 
 // Apply Binding to the ViewModel
 $(function() {

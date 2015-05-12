@@ -3,6 +3,9 @@ http://chris-hammersley.github.io/Neighborhood-Map/
 
 # Resources & Research
 
+> Overcoming Code Rejection
+http://stackoverflow.com/questions/1963102/what-does-the-jslint-error-body-of-a-for-in-should-be-wrapped-in-an-if-statemen
+
 > Google Maps API, Knockout & Data Binding
 http://discussions.udacity.com/t/google-maps-allows-data-binding-with-mvc-objects/4277
 https://developers.google.com/maps/articles/mvcfun
