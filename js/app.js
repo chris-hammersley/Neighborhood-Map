@@ -411,7 +411,7 @@ function URLStatusCheck(geocodingAPI) {
   $.ajax(geocodingAPI, {
     contentType: "application/json; charset=utf-8",
     dataType: 'jsonp',
-    crossDomain: true,
+    crossDomain: false,
   })
     .success(function(data, textStatus, jqXHR) {
  //   alert("success");
