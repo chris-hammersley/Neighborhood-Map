@@ -405,7 +405,7 @@ function MapViewModel() {
 // TODO: allow users to choose another city by making latlng a variable based on new city selection
 
 // Reverse Geocoding API to Return City & State Names
-var geocodingAPI = "https://maps.gooxxgleapis.com/maps/api/geocode/json?latlng=29.9500,-90.0667";
+var geocodingAPI = "https://maps.googleapis.com/maps/api/geocode/json?latlng=29.9500,-90.0667";
 
 function URLStatusCheck(geocodingAPI) {
   $.ajax(geocodingAPI, {
@@ -419,7 +419,7 @@ function URLStatusCheck(geocodingAPI) {
   })
     .error(function (jqXHR, textStatus, errorThrown) {
 //    alert("error");
-    $("#city-name").html("Explore Local Cuisine!");
+    $("#city-name").html("Explore New Orleans Cuisine!");
   })
     .always(function () {
   });
