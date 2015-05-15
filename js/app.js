@@ -405,7 +405,27 @@ function MapViewModel() {
 // TODO: allow users to choose another city by making latlng a variable based on new city selection
 
 // Reverse Geocoding API to Return City & State Names
-var geocodingAPI = "https://maps.googleapis.com/maps/api/geocode/json?latlng=29.9500,-90.0667";
+var geocodingAPI = "https://maps.gooxxgleapis.com/maps/api/geocode/json?latlng=29.9500,-90.0667";
+
+function URLStatusCheck(geocodingAPI) {
+  $.ajax(geocodingAPI, {
+    contentType: "application/json; charset=utf-8",
+    dataType: 'jsonp',
+    crossDomain: true,
+  })
+    .success(function(data, textStatus, jqXHR) {
+ //   alert("success");
+    reverseGeoCityName();
+  })
+    .error(function (jqXHR, textStatus, errorThrown) {
+//    alert("error");
+    $("#city-name").html("Explore Local Cuisine!");
+  })
+    .always(function () {
+  });
+}
+
+URLStatusCheck();
 
 function reverseGeoCityName() {
   $.getJSON(geocodingAPI, function (json) {
@@ -428,26 +448,6 @@ function reverseGeoCityName() {
       }
   });
 }
-
-function URLStatusCheck(geocodingAPI) {
-  $.ajax(geocodingAPI, {
-    contentType: "application/json; charset=utf-8",
-    dataType: 'json',
-    crossDomain: false,
-  })
-    .done(function(data, textStatus, jqXHR) {
- //   alert("success");
-    reverseGeoCityName();
-  })
-    .error(function (jqXHR, textStatus, errorThrown) {
-//    alert("error");
-    $("#city-name").html("Explore Local Cuisine!");
-  })
-    .always(function () {
-  });
-}
-
-URLStatusCheck();
 
 /*
 $.getJSON(geocodingAPI, function (json) {
