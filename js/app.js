@@ -240,7 +240,7 @@ function MapViewModel() {
       infowindow.open(map, marker);
     });
 
-    // TODO: allow user to change the venue category and number of venues shown with on page selectors
+    // TODO: allow user to change the venue category and number of venues shown with selectors
 
     // Return FourSquare Venues based on Category & Map Location from FourSquare API
     foursquareBaseURL = "https://api.foursquare.com/v2/venues/explore?ll=";
@@ -254,12 +254,16 @@ function MapViewModel() {
 
     // API Request to FourSquare; Venue Results Create Google Map Markers
     $.getJSON(foursquareApiQuery, function(data) {
-      self.venueResults(data.response.groups[0].items);
-      for (var i in self.venueResults()) {
-//        if (self.venueResults.hasOwnProperty(i)) {
-        createMarkers(self.venueResults()[i].venue);
-//      }
-    }
+      // If FourSquare API Query is OK
+      if (data.status !== 'OK') {
+        self.venueResults(data.response.groups[0].items);
+        for (var i in self.venueResults()) {
+          createMarkers(self.venueResults()[i].venue);
+        }        
+      } else {
+        // Error Handling
+        alert("error retrieving FourSquare venues");
+      }
 
       // Maximize the Display Zoom Level of Google Map based on FourSquare Result Set
       var bounds = data.response.suggestedBounds;
@@ -400,78 +404,47 @@ function MapViewModel() {
     map.fitBounds(mapBounds);
     $("#map-canvas").height($(window).height());
   });
-}
 
 // TODO: allow users to choose another city by making latlng a variable based on new city selection
 
 // Reverse Geocoding API to Return City & State Names
 var geocodingAPI = "https://maps.googleapis.com/maps/api/geocode/json?latlng=29.9500,-90.0667";
-
-function URLStatusCheck(geocodingAPI) {
-  $.ajax(geocodingAPI, {
-    contentType: "application/json; charset=utf-8",
-    dataType: 'jsonp',
-    crossDomain: false,
-  })
-    .success(function(data, textStatus, jqXHR) {
- //   alert("success");
-    reverseGeoCityName();
-  })
-    .error(function (jqXHR, textStatus, errorThrown) {
-//    alert("error");
-    $("#city-name").html("Explore New Orleans Cuisine!");
-  })
-    .always(function () {
-  });
-}
-
-URLStatusCheck();
+var city, state;
 
 function reverseGeoCityName() {
-  $.getJSON(geocodingAPI, function (json) {
-      if (json.status !== 'OK') {
-        var result = json.results[0];
-    
-        //Look for Locality (city) and Administrative_area_level_1 (state) Tags
-        var city = "";
-        var state = "";
-        for (var i = 0, len = result.address_components.length; i < len; i++) {
-            var ac = result.address_components[i];
-            if(ac.types.indexOf("locality") >= 0) city = ac.long_name;
-            if(ac.types.indexOf("administrative_area_level_1") >= 0) state = ac.long_name;
-        }
-        
-        //Display the Welcome Line if Values aren't Null
-        if(city !== '' && state !== '') {
-          $("#city-name").html("Explore Food in " + city + "!");
-        }
-      }
+  $.getJSON(geocodingAPI, function (data) {
+    // Expose Alert for Error Checking
+    // alert('Your City Has Loaded!');
+
+    // Load the City & State results
+    var result = data.results[0];
+    //Look for Locality (city) and Administrative_area_level_1 (state) Tags
+    city = "";
+    state = "";
+    for (var i = 0, len = result.address_components.length; i < len; i++) {
+        var ac = result.address_components[i];
+        if(ac.types.indexOf('locality') >= 0) city = ac.long_name;
+        if(ac.types.indexOf('administrative_area_level_1') >= 0) state = ac.long_name;
+    }
+  })
+  // Display the Dynamic Welcome Message if Done
+  .done(function() {
+    //Display the Welcome Line if Values aren't Null
+    if(city !== '' && state !== '') {
+      $('#city-name').html('Explore Food in ' + city + '!');
+    }
+  })
+  // Display the Static Welcome Message if Fail
+  .fail(function() {
+    // Expose Alert for Error Checking
+    // alert('Failed to load City');
+
+    // Change to Generic Headline
+    $('#city-name').html('Explore New Orleans Cuisine!');
   });
 }
-
-/*
-$.getJSON(geocodingAPI, function (json) {
-  if (json.status !== 'OK') {
-    $("#city-name").html("Explore Local Cuisine!");
- } else {
-      var result = json.results[0];
-      
-      //Look for Locality (city) and Administrative_area_level_1 (state) Tags
-      var city = "";
-      var state = "";
-      for (var i = 0, len = result.address_components.length; i < len; i++) {
-          var ac = result.address_components[i];
-          if(ac.types.indexOf("locality") >= 0) city = ac.long_name;
-          if(ac.types.indexOf("administrative_area_level_1") >= 0) state = ac.long_name;
-      }
-      
-      //Display the Welcome Line if Values aren't Null
-      if(city !== '' && state !== '') {
-        $("#city-name").html("Explore Food in " + city + "!");
-      }
-    }
-  });
-*/
+reverseGeoCityName();
+}
 
 // Apply Binding to the ViewModel
 $(function() {

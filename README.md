@@ -5,6 +5,8 @@ http://chris-hammersley.github.io/Neighborhood-Map/
 
 > Overcoming Code Rejection
 http://stackoverflow.com/questions/1963102/what-does-the-jslint-error-body-of-a-for-in-should-be-wrapped-in-an-if-statemen
+http://stackoverflow.com/questions/1740218/error-handling-in-getjson-calls
+http://stackoverflow.com/questions/309953/how-do-i-catch-jquery-getjson-or-ajax-with-datatype-set-to-jsonp-error-w
 
 > Google Maps API, Knockout & Data Binding
 http://discussions.udacity.com/t/google-maps-allows-data-binding-with-mvc-objects/4277
