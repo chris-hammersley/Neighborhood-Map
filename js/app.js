@@ -97,6 +97,7 @@ function MapViewModel() {
   var catId = "4d4b7105d754a06374d81259"; // Category of FourSquare Venue Results
   var locationLimit = 30; // Number of Venue Results returned from FourSquare
   var tagIG = 'noladining'; // Instagram Tag to Retrieve IG Images from Instafeed
+  var venueResults = [];
 
   self.venueResults = ko.observableArray([]); // Venue List Results returned from FourSquare query
   self.filteredList = ko.observableArray(self.venueResults()); // Venue List Results filtered by Searchterm
@@ -176,12 +177,10 @@ function MapViewModel() {
     var list = [];
     var searchterm = self.searchterm().toLowerCase();
     for (var i in self.venueResults()) {
-//      if (self.venueResults.hasOwnProperty(i)) {
       venue = self.venueResults()[i].venue;
       if (venue.name.toLowerCase().indexOf(searchterm) != -1 ||
         venue.categories[0].name.toLowerCase().indexOf(searchterm) != -1) {
         list.push(self.venueResults()[i]);
-//      }
     }}
     self.filteredList(list);
   });
@@ -194,14 +193,12 @@ function MapViewModel() {
   // Filter Map Markers by Searchterm
   function filteringMarkersBy(searchterm) {
     for (var i in venueMarkers) {
-//      if (venueMarkers.hasOwnProperty(i)) {
       if (venueMarkers[i].marker.map === null) {
         venueMarkers[i].marker.setMap(map);
       }
       if (venueMarkers[i].name.indexOf(searchterm) === -1 &&
         venueMarkers[i].category.indexOf(searchterm) === -1) {
         venueMarkers[i].marker.setMap(null);
-//      }
     }}
   }
 
@@ -211,18 +208,22 @@ function MapViewModel() {
       disableDefaultUI: true,
     };
     if (window.google === undefined) {
+      console.log('Uh oh. Google Map has a problem. Better call Houston!')
       var errorPage = document.getElementById('error');
       error.style.display = 'block';
     } else {
-    map = new google.maps.Map(document.querySelector('#map-canvas'), mapOptions);
-    infowindow = new google.maps.InfoWindow();
-  }}
+      console.log('Success! Google Map has been loaded :)')
+      map = new google.maps.Map(document.querySelector('#map-canvas'), mapOptions);
+      infowindow = new google.maps.InfoWindow();
+    }
+  }
 
   // Add the Neighborhood Markers based on FourSquare Venue Results to Google Map
   function getNeighborhoodInformation(placeData) {
     var lat = placeData.geometry.location.lat();
     var lng = placeData.geometry.location.lng();
     var name = placeData.name;
+    var bounds;
     preferredLocation = new google.maps.LatLng(lat, lng);
     map.setCenter(preferredLocation);
 
@@ -254,25 +255,27 @@ function MapViewModel() {
 
     // API Request to FourSquare; Venue Results Create Google Map Markers
     $.getJSON(foursquareApiQuery, function(data) {
-      // If FourSquare API Query is OK
-      if (data.status !== 'OK') {
-        self.venueResults(data.response.groups[0].items);
-        for (var i in self.venueResults()) {
-          createMarkers(self.venueResults()[i].venue);
-        }        
-      } else {
-        // Error Handling
-        alert("error retrieving FourSquare venues");
+      self.venueResults(data.response.groups[0].items);
+      for (var i in self.venueResults()) {
+        createMarkers(self.venueResults()[i].venue);
       }
-
       // Maximize the Display Zoom Level of Google Map based on FourSquare Result Set
-      var bounds = data.response.suggestedBounds;
+      bounds = data.response.suggestedBounds;
       if (bounds !== undefined) {
         mapBounds = new google.maps.LatLngBounds(
           new google.maps.LatLng(bounds.sw.lat, bounds.sw.lng),
           new google.maps.LatLng(bounds.ne.lat, bounds.ne.lng));
         map.fitBounds(mapBounds);
-      }
+      }        
+    })
+    .done(function() {
+      console.log('Success! Grub Spots have been loaded :)');
+    }) // closes done
+    .fail(function() {
+      console.log('Failure to load grub spots :(');
+
+    // Update Grub Spot List Message on Fail
+    $('.no-result').html('It looks like the connection<br />to FourSquare is having<br />problems. Please try<br /> reloading the page to<br /> refresh the grub spot list!');
     });
   }
 
@@ -295,10 +298,8 @@ function MapViewModel() {
   // Remove Neighborhood Marker from Map
   function removeNeighborhoodMarker() {
     for (var i in neighborhoodMarkers) {
-//      if (neighborhoodMarkers.hasOwnProperty(i)) {
       neighborhoodMarkers[i].setMap(null);
       neighborhoodMarkers[i] = null;
-//    }
   }
     while (neighborhoodMarkers.length > 0) {
       neighborhoodMarkers.pop();
@@ -324,7 +325,7 @@ function MapViewModel() {
     var rating = venue.rating; // Displays Venue Rating
     var status; // Displays Current Open or Closed Status
     if (venue.hours === undefined) {
-      status = '<b>Open? Closed?</b> Maybe you should call...' + contact; // Error Handling when Venue Hours are Undefined
+      status = '<b>Open? Closed?</b> Better call...' + contact; // Error Handling when Venue Hours are Undefined
       } else {
       status = venue.hours.status; // Displays if Venue is Open or Closed
       }
@@ -373,7 +374,7 @@ function MapViewModel() {
     // Section 4 shows if the Venue is Open or Closed if available
     var section4;
     if (status === undefined) {
-      section4 = '<b>Open? Closed?</b> Maybe you should call...' + contact; // Error Handling when Venue Hours are Undefined
+      section4 = '<b>Open? Closed?</b> Better call...' + contact; // Error Handling when Venue Hours are Undefined
     } else {
       section4 = '<b>' + status + '</b>';
     }
@@ -389,10 +390,8 @@ function MapViewModel() {
   // Function to Remove Venue Map Markers
   function removeVenueMarkers() {
     for (var i in venueMarkers) {
-//      if (venueMarkers.hasOwnProperty(i)) {
       venueMarkers[i].marker.setMap(null);
       venueMarkers[i].marker = null;
-//    }
   }
     while (venueMarkers.length > 0) {
       venueMarkers.pop();
@@ -413,9 +412,6 @@ var city, state;
 
 function reverseGeoCityName() {
   $.getJSON(geocodingAPI, function (data) {
-    // Expose Alert for Error Checking
-    // alert('Your City Has Loaded!');
-
     // Load the City & State results
     var result = data.results[0];
     //Look for Locality (city) and Administrative_area_level_1 (state) Tags
@@ -427,19 +423,16 @@ function reverseGeoCityName() {
         if(ac.types.indexOf('administrative_area_level_1') >= 0) state = ac.long_name;
     }
   })
-  // Display the Dynamic Welcome Message if Done
+  // Display the Dynamic Welcome Message on Success
   .done(function() {
-    //Display the Welcome Line if Values aren't Null
+    console.log('Success! Your Location Has Loaded :)');
     if(city !== '' && state !== '') {
       $('#city-name').html('Explore Food in ' + city + '!');
     }
   })
-  // Display the Static Welcome Message if Fail
+  // Display the Static Welcome Message on Failure
   .fail(function() {
-    // Expose Alert for Error Checking
-    // alert('Failed to load City');
-
-    // Change to Generic Headline
+    console.log('Uh oh. Failed to find your location. Are you lost? :(');
     $('#city-name').html('Explore New Orleans Cuisine!');
   });
 }
