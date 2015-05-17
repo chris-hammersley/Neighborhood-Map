@@ -207,11 +207,11 @@ function MapViewModel() {
       disableDefaultUI: true,
     };
     if (window.google === undefined) {
-      console.log('Uh oh. Google Map has a problem. Better call Houston!')
+      console.log('Uh oh. Google Map has a problem. Better call Houston!');
       var errorPage = document.getElementById('error');
       error.style.display = 'block';
     } else {
-      console.log('Success! Google Map has been loaded :)')
+      console.log('Success! Google Map has been loaded :)');
       map = new google.maps.Map(document.querySelector('#map-canvas'), mapOptions);
       infowindow = new google.maps.InfoWindow();
     }
