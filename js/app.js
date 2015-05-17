@@ -97,7 +97,6 @@ function MapViewModel() {
   var catId = "4d4b7105d754a06374d81259"; // Category of FourSquare Venue Results
   var locationLimit = 30; // Number of Venue Results returned from FourSquare
   var tagIG = 'noladining'; // Instagram Tag to Retrieve IG Images from Instafeed
-  var venueResults = [];
 
   self.venueResults = ko.observableArray([]); // Venue List Results returned from FourSquare query
   self.filteredList = ko.observableArray(self.venueResults()); // Venue List Results filtered by Searchterm
