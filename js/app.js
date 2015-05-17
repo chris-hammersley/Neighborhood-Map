@@ -1,20 +1,11 @@
 /**
  * Code to display a Google Map of Hot Grub Spots in New Orleans.
- * Fetches data from the Google Maps API and Foursquare API
+ * Fetches data from the Google Maps API, Foursquare API, Google Reverse Geocoding API & Instafeed API
+ * For Udacity Project #5: Neighborhood Map in the Nanodegree in Front-end Web Development program
  * @author Chris Hammersley
  */
 
 /* ======= Model ======= */
-
-// Function that creates the basic info necessary to populate Map Markers
-var MapMarkerSet = function(marker, name, category, position) {
-  "use strict";
-  this.marker = marker;
-  this.name = name;
-  this.category = category;
-  this.position = position;
-};
-
 // TODO: create neighborhood selector
 // TODO: change Instagram images by neighborhood
 
@@ -73,18 +64,18 @@ var venueTypes = [
 */
 
 /* ======= ViewModel ======= */
-
-// TODO: select neighborhood names to change location
-
-/* Make Neighborhood Array Values Observable
-var Hood = function (data) {
-    this.name = ko.observable(data.name);
-    this.value = ko.observable(data.value);
-  };
-*/
-
 // Set Up the Google Map ViewModel
 function MapViewModel() {
+
+  // Function that creates the basic info necessary to populate Map Markers
+  var MapMarkerSet = function(marker, name, category, position) {
+    "use strict";
+    this.marker = marker;
+    this.name = name;
+    this.category = category;
+    this.position = position;
+  };
+
   var self = this;
   var map;
   var service; // Used to filter the Results Set based on Searchterm
@@ -115,6 +106,16 @@ function MapViewModel() {
   });
   feed.run();
 
+// TODO: select neighborhood names to change location
+
+/* 
+// Make Neighborhood Array Values Observable
+var Hood = function (data) {
+    this.name = ko.observable(data.name);
+    this.value = ko.observable(data.value);
+  };
+*/
+
 // TODO: change neighborhoods when new name selected
 
 /* 
@@ -135,8 +136,6 @@ function MapViewModel() {
   this.setNeighborhood = function(currentHood) {
     self.currentHood(currentHood);
   };
-
-  console.log(defaultNeighborhood)
 */
 
   // Set Google Map Size based on Browser Window
@@ -348,10 +347,10 @@ function MapViewModel() {
     venueMarkers.push(new MapMarkerSet(marker, name.toLowerCase(), category.toLowerCase(), position));
 
     // Add FourSquare Venue Details to Map Marker Infowindow
-    // Section 1 shows the Venue Name (venue name can be filtered with searchterm)
+    // Section 1 shows the Venue Name in Map Marker Infowindow (venue name can be filtered with searchterm)
     var section1 = '<div id="iw-container" class="infowindow"><p><span class="iw-title">' + name + '</span></p></div>';
       
-    // Section 2 shows the Venue 'Hotness' Rating if available
+    // Section 2 shows the Venue 'Hotness' Rating in Map Marker Infowindow 
     var section2;
     if (rating !== undefined) {
       section2 = '<p><strong>Hotness Rating:</strong> <span class="v-rating">' + rating.toFixed(1) + '</span></p>';
@@ -359,7 +358,7 @@ function MapViewModel() {
       section2 = '<p><span class="v-rating"><em>not available</em></span></p>';
     }
 
-    // Section 3 shows the Venue Type, Address & Cross Street if available (venue type can be filtered with searchterm; i.e. creole, american, bakery, diner, etc.)
+    // Section 3 shows the Venue Type, Address & Cross Street if available in Map Marker Infowindow  (venue type can be filtered with searchterm; i.e. creole, american, bakery, diner, etc.)
     // TODO - allow for dynamic venue types based on values in neighborhoods array
     var section3;
     if (xStreet !== undefined) {
@@ -370,7 +369,7 @@ function MapViewModel() {
       '</span></p><p><span>' + address  + '</span></p>';
     }
 
-    // Section 4 shows if the Venue is Open or Closed if available
+    // Section 4 shows if the Venue is Open or Closed in Map Marker Infowindow 
     var section4;
     if (status === undefined) {
       section4 = '<b>Open? Closed?</b> Better call...' + contact; // Error Handling when Venue Hours are Undefined
@@ -378,7 +377,7 @@ function MapViewModel() {
       section4 = '<b>' + status + '</b>';
     }
 
-    // Set the Infowindow with FourSquare Venue Content when Marker is Clicked
+    // Set the Map Marker Infowindow with FourSquare Venue Content when Marker is Clicked
     google.maps.event.addListener(marker, 'click', function() {
       infowindow.setContent(section1 + section2 + section3 + section4);
       infowindow.open(map, this);
