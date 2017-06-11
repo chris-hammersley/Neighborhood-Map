@@ -96,8 +96,8 @@ function MapViewModel() {
 
   // Setup Instafeed API to fetch Images based on IG Tag
   var feed = new Instafeed({
-      get: 'user', //added on 6/11/17
-      userId: '1685836', //added on 6/11/17
+//      get: 'user', //added on 6/11/17
+//      userId: '1685836', //added on 6/11/17
       accessToken: '9a15c30d50114ecd822132ac7d9ae3d1', //added on 6/11/17
       get: 'tagged',
       tagName: tagIG,
