@@ -98,14 +98,14 @@ function MapViewModel() {
   var feed = new Instafeed({
 //      get: 'user', //added on 6/11/17
 //      userId: '1685836', //added on 6/11/17
-      accessToken: '9a15c30d50114ecd822132ac7d9ae3d1', //added on 6/11/17
       get: 'tagged',
       tagName: tagIG,
       target: 'instafeed',
       sortBy: 'most-recent',
       limit: 8,
       template: '<a href="{{link}}" target="_blank"><img src="{{image}}" /></a><br />',
-      clientId: 'ecdea4ae8c6f476a9a84e4a47d999170'
+      accessToken: '1685836.ba4c844.48d47e0bb4ea48a680cbde92a3bee058' //added new Access Token on 6/11/17 from http://instagramwordpress.rafsegat.com/docs/get-access-token/
+//      clientId: 'ecdea4ae8c6f476a9a84e4a47d999170'
   });
   feed.run();
 
