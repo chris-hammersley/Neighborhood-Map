@@ -85,11 +85,11 @@ function MapViewModel() {
   var neighborhoodMarkers = []; // Array of Map Markers for Neighborhoods
   var venueMarkers = []; // Array of Map Markers of FourSquare Venues
   var defaultNeighborhood = 'Marigny, New Orleans'; // Sets Default Map Location
-  var catId = "4d4b7105d754a06374d81259"; // Category of FourSquare Venue Results
-  var intent = "browse"; // FourSquare Search Query Intent
-  var radius = 8; // FourSquare Search Radius in Meters
-  var locationLimit = 30; // Number of Venue Results returned from FourSquare
-  var tagIG = 'noladining'; // Instagram Tag to Retrieve IG Images from Instafeed
+  // var catId = "4d4b7105d754a06374d81259"; // Category of FourSquare Venue Results - Removed 6/11/17 due to changes in FSQ API
+  var sectionID = "topPicks"; // Replaced FourSquare Categories with Sections for Explore Venues (instead of Search Venues)
+  var radiusNo = 8; // FourSquare Search Radius in Meters
+  var locationLimit = 30; // Number of Venue Results returned from FourSquare Explore Query
+  var tagIG = 'nolalocalfood'; // Instagram Tag to Retrieve IG Images from Instafeed
 
   self.venueResults = ko.observableArray([]); // Venue List Results returned from FourSquare query
   self.filteredList = ko.observableArray(self.venueResults()); // Venue List Results filtered by Searchterm
@@ -249,16 +249,19 @@ var Hood = function (data) {
     // Return FourSquare Venues based on Category & Map Location from FourSquare API
     foursquareBaseURL = "https://api.foursquare.com/v2/venues/explore?ll=";
     initialLatLng = lat + ", " + lng;
-    category = "&categoryId=" + catId;
+    section = "&section=" + sectionID;
+    radius = "&radius=" + radiusNo;
     limit = "&limit=" + locationLimit
-// removing Authorization as venue searches shouldn't need them 6/11/17
+
+// removing Authorization & Category as venue searches shouldn't need them 6/11/17
 //    authorization = "&oauth_token=HG5IOTFR2QGYTMJNHNEW32TL4VISFRKBE1LKS0AXT4SYLDOW&v=20150301";
+//    category = "&categoryId=" + catId;
     
     // Compile FourSquare API Request String based on Variables
-    foursquareApiQuery = foursquareBaseURL + initialLatLng + category + limit + intent + radius;
-// adding Intent & Radius
-// removing Authorization from query string 6/11/17
-//     + authorization;
+    foursquareApiQuery = foursquareBaseURL + initialLatLng + section + limit + radius;
+// adding Section & Radius
+// removing Authorization, Category & Intent from query string 6/11/17
+//     + authorization; + category; + intent
 
     // API Request to FourSquare; Venue Results Create Google Map Markers
     $.getJSON(foursquareApiQuery, function(data) {
