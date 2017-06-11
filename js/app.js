@@ -248,13 +248,12 @@ var Hood = function (data) {
     foursquareBaseURL = "https://api.foursquare.com/v2/venues/explore?ll=";
     initialLatLng = lat + ", " + lng;
     category = "&categoryId=" + catId;
-    limit = "&limit=" + locationLimit;
-    openNow = '1' // added Open Now 6/11/17
+    limit = "&limit=" + locationLimit
 // removing Authorization as venue searches shouldn't need them 6/11/17
 //    authorization = "&oauth_token=HG5IOTFR2QGYTMJNHNEW32TL4VISFRKBE1LKS0AXT4SYLDOW&v=20150301";
     
     // Compile FourSquare API Request String based on Variables
-    foursquareApiQuery = foursquareBaseURL + initialLatLng + category + limit + openNow;
+    foursquareApiQuery = foursquareBaseURL + initialLatLng + category + limit;
 // removing Authorization from query string 6/11/17
 //     + authorization;
 
