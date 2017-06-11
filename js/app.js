@@ -86,6 +86,8 @@ function MapViewModel() {
   var venueMarkers = []; // Array of Map Markers of FourSquare Venues
   var defaultNeighborhood = 'Marigny, New Orleans'; // Sets Default Map Location
   var catId = "4d4b7105d754a06374d81259"; // Category of FourSquare Venue Results
+  var intent = "browse"; // FourSquare Search Query Intent
+  var radius = 8; // FourSquare Search Radius in Meters
   var locationLimit = 30; // Number of Venue Results returned from FourSquare
   var tagIG = 'noladining'; // Instagram Tag to Retrieve IG Images from Instafeed
 
@@ -253,7 +255,8 @@ var Hood = function (data) {
 //    authorization = "&oauth_token=HG5IOTFR2QGYTMJNHNEW32TL4VISFRKBE1LKS0AXT4SYLDOW&v=20150301";
     
     // Compile FourSquare API Request String based on Variables
-    foursquareApiQuery = foursquareBaseURL + initialLatLng + category + limit;
+    foursquareApiQuery = foursquareBaseURL + initialLatLng + category + limit + intent + radius;
+// adding Intent & Radius
 // removing Authorization from query string 6/11/17
 //     + authorization;
 
