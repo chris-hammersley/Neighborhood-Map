@@ -249,10 +249,14 @@ var Hood = function (data) {
     initialLatLng = lat + ", " + lng;
     category = "&categoryId=" + catId;
     limit = "&limit=" + locationLimit;
-    authorization = "&oauth_token=HG5IOTFR2QGYTMJNHNEW32TL4VISFRKBE1LKS0AXT4SYLDOW&v=20150301";
+    openNow = '1' // added Open Now 6/11/17
+// removing Authorization as venue searches shouldn't need them 6/11/17
+//    authorization = "&oauth_token=HG5IOTFR2QGYTMJNHNEW32TL4VISFRKBE1LKS0AXT4SYLDOW&v=20150301";
     
     // Compile FourSquare API Request String based on Variables
-    foursquareApiQuery = foursquareBaseURL + initialLatLng + category + limit + authorization;
+    foursquareApiQuery = foursquareBaseURL + initialLatLng + category + limit + openNow;
+// removing Authorization from query string 6/11/17
+//     + authorization;
 
     // API Request to FourSquare; Venue Results Create Google Map Markers
     $.getJSON(foursquareApiQuery, function(data) {
