@@ -86,6 +86,7 @@ function MapViewModel() {
   var venueMarkers = []; // Array of Map Markers of FourSquare Venues
   var defaultNeighborhood = 'Marigny, New Orleans'; // Sets Default Map Location
   // var catId = "4d4b7105d754a06374d81259"; // Category of FourSquare Venue Results - Removed 6/11/17 due to changes in FSQ API
+  var date = 20170101; // FourSquare param that indicates the client is up to date as of the specified date
   var queryType = "Happy Hours";
   var sectionID = "topPicks"; // Replaced FourSquare Categories with Sections for Explore Venues (instead of Search Venues)
   var radiusNo = 8; // FourSquare Search Radius in Meters
@@ -254,13 +255,14 @@ var Hood = function (data) {
     radius = "&radius=" + radiusNo;
     limit = "&limit=" + locationLimit;
     query = "&query=" + queryType;
+    v = "&v=" + date;
 
 // removing Authorization & Category as venue searches shouldn't need them 6/11/17
 //    authorization = "&oauth_token=HG5IOTFR2QGYTMJNHNEW32TL4VISFRKBE1LKS0AXT4SYLDOW&v=20150301";
 //    category = "&categoryId=" + catId;
     
     // Compile FourSquare API Request String based on Variables
-    foursquareApiQuery = foursquareBaseURL + initialLatLng + query + section + limit + radius;
+    foursquareApiQuery = foursquareBaseURL + initialLatLng + query + section + limit + radius + v;
 // adding Section & Radius
 // removing Authorization, Category & Intent from query string 6/11/17
 //     + authorization; + category; + intent
