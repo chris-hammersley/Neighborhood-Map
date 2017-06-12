@@ -89,16 +89,17 @@ function MapViewModel() {
   // var catId = "4d4b7105d754a06374d81259"; // Category of 4Square Venue Results - Removed 6/11/17 due to changes in 4SQ API
   var date = 20170101; // 4Square param that indicates the client is up to date as of the specified date Added 06/11/17
   var queryType = "Happy Hours";
-  var sectionID = "topPicks"; // Replaced 4Square Categories with Sections for Explore Venues (instead of Search Venues) Added 06/11/17
-  var radiusNo = 8; // 4Square Search Radius in Meters Added 06/11/17
-  var locationLimit = 30; // Number of Venue Results returned from 4Square Explore Query
-  var tagIG = 'nolalocalfood'; // Instagram Tag to Retrieve IG Images from Instafeed
+  var sectionID = "food"; // Replaced 4Square Categories with Sections for Explore Venues (instead of Search Venues) Added 06/11/17
+  var radiusNo = 1500; // 4Square Search Radius in Meters Added 06/11/17
+  var locationLimit = 20; // Number of Venue Results returned from 4Square Explore Query
+//  var tagIG = 'nolalocalfood'; // Instagram Tag to Retrieve IG Images from Instafeed
 
   self.venueResults = ko.observableArray([]); // Venue List Results returned from FourSquare query
   self.filteredList = ko.observableArray(self.venueResults()); // Venue List Results filtered by Searchterm
   self.neighborhood = ko.observable(defaultNeighborhood); // Neighborhood Value to use with Markers
   self.searchterm = ko.observable(''); // Observable Searchterm to filter Venue List
 
+/* REMOVE INSTAFEED 06/12/17
   // Setup Instafeed API to fetch Images based on IG Tag
   var feed = new Instafeed({
 //      get: 'user', //added on 6/11/17
@@ -113,6 +114,7 @@ function MapViewModel() {
 //      clientId: 'ecdea4ae8c6f476a9a84e4a47d999170'
   });
   feed.run();
+*/
 
 // TODO: select neighborhood names to change location
 
@@ -249,7 +251,7 @@ var Hood = function (data) {
 
     // TODO: allow user to change the venue category and number of venues shown with selectors
 
-    // Return FourSquare Venues based on Category & Map Location from FourSquare API
+    // Return FourSquare Venues based on Section & Map Location from FourSquare API
     foursquareBaseURL = "https://api.foursquare.com/v2/venues/explore?ll=";
     initialLatLng = lat + ", " + lng;
     section = "&section=" + sectionID;
