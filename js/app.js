@@ -88,8 +88,8 @@ function MapViewModel() {
   var defaultNeighborhood = 'Marigny, New Orleans'; // Sets Default Map Location
   // var catId = "4d4b7105d754a06374d81259"; // Category of 4Square Venue Results - Removed 6/11/17 due to changes in 4SQ API
   var date = 20170101; // 4Square param that indicates the client is up to date as of the specified date Added 06/11/17
-  var queryType = "Happy Hours";
-  var sectionID = "trending"; // Replaced 4Square Categories with Sections for Explore Venues (instead of Search Venues) Added 06/11/17
+  var queryType = "food,drinks";
+ // var sectionID = "trending"; // Replaced 4Square Categories with Sections for Explore Venues (instead of Search Venues) Added 06/11/17
   var radiusNo = 900; // 4Square Search Radius in Meters Added 06/11/17
   var locationLimit = 20; // Number of Venue Results returned from 4Square Explore Query
 //  var tagIG = 'nolalocalfood'; // Instagram Tag to Retrieve IG Images from Instafeed
@@ -254,7 +254,7 @@ var Hood = function (data) {
     // Return FourSquare Venues based on Section & Map Location from FourSquare API
     foursquareBaseURL = "https://api.foursquare.com/v2/venues/explore?ll=";
     initialLatLng = lat + ", " + lng;
-    section = "&section=" + sectionID;
+//    section = "&section=" + sectionID;
     radius = "&radius=" + radiusNo;
     limit = "&limit=" + locationLimit;
     query = "&query=" + queryType;
@@ -266,10 +266,10 @@ var Hood = function (data) {
 //    category = "&categoryId=" + catId;
     
     // Compile FourSquare API Request String based on Variables
-    foursquareApiQuery = foursquareBaseURL + initialLatLng + query + section + limit + radius + client_id + client_secret + v;
+    foursquareApiQuery = foursquareBaseURL + initialLatLng + query + limit + radius + client_id + client_secret + v;
 // adding Section, Radius, API date, client id & client secret
 // removing Category & Intent from query string 6/11/17
-//     + category; + intent
+//     + category; + intent; + section
 
     // API Request to FourSquare; Venue Results Create Google Map Markers
     $.getJSON(foursquareApiQuery, function(data) {
