@@ -256,14 +256,15 @@ var Hood = function (data) {
     limit = "&limit=" + locationLimit;
     query = "&query=" + queryType;
     v = "&v=" + date;
-    authorization = "&oauth_token=HG5IOTFR2QGYTMJNHNEW32TL4VISFRKBE1LKS0AXT4SYLDOW&v=20170101";
+    client_id = "&client_id=GDIGYUEJ2F35H1E3BQCCSZVNZEP2OAJBNOTD2BEVHL0IXF3O";
+    client_secret = "&client_secret=HIO22Q3EXWKQ12YQ15NHN02X4L4V35NVP1C1GFEPGQ1C5WCW"
 
 // removing Category 6/11/17
 //    category = "&categoryId=" + catId;
     
     // Compile FourSquare API Request String based on Variables
-    foursquareApiQuery = foursquareBaseURL + authorization + initialLatLng + query + section + limit + radius + v;
-// adding Section & Radius
+    foursquareApiQuery = foursquareBaseURL + authorization + initialLatLng + query + section + limit + radius + client_id + client_secret + v;
+// adding Section, Radius, API date, client id & client secret
 // removing Category & Intent from query string 6/11/17
 //     + category; + intent
 
