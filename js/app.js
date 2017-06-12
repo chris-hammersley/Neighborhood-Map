@@ -78,19 +78,20 @@ function MapViewModel() {
 
   var self = this;
   var map;
+  var key = "AIzaSyAeBp4_jaMEkeG3OckJHBfu0T6LIbUB-UI"; // Google Map API key non-production locked to URL Added 06/11/17
   var service; // Used to filter the Results Set based on Searchterm
   var preferredLocation; // Initial Neighborhood that drives Google Map location
   var infowindow; // Infowindow that displays when Map Marker is clicked
   var mapBounds; // Used to set the display boundaries of the Google Map
   var neighborhoodMarkers = []; // Array of Map Markers for Neighborhoods
-  var venueMarkers = []; // Array of Map Markers of FourSquare Venues
+  var venueMarkers = []; // Array of Map Markers of 4Square Venues
   var defaultNeighborhood = 'Marigny, New Orleans'; // Sets Default Map Location
-  // var catId = "4d4b7105d754a06374d81259"; // Category of FourSquare Venue Results - Removed 6/11/17 due to changes in FSQ API
-  var date = 20170101; // FourSquare param that indicates the client is up to date as of the specified date
+  // var catId = "4d4b7105d754a06374d81259"; // Category of 4Square Venue Results - Removed 6/11/17 due to changes in 4SQ API
+  var date = 20170101; // 4Square param that indicates the client is up to date as of the specified date Added 06/11/17
   var queryType = "Happy Hours";
-  var sectionID = "topPicks"; // Replaced FourSquare Categories with Sections for Explore Venues (instead of Search Venues)
-  var radiusNo = 8; // FourSquare Search Radius in Meters
-  var locationLimit = 30; // Number of Venue Results returned from FourSquare Explore Query
+  var sectionID = "topPicks"; // Replaced 4Square Categories with Sections for Explore Venues (instead of Search Venues) Added 06/11/17
+  var radiusNo = 8; // 4Square Search Radius in Meters Added 06/11/17
+  var locationLimit = 30; // Number of Venue Results returned from 4Square Explore Query
   var tagIG = 'nolalocalfood'; // Instagram Tag to Retrieve IG Images from Instafeed
 
   self.venueResults = ko.observableArray([]); // Venue List Results returned from FourSquare query
