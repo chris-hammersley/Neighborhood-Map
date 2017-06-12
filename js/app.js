@@ -256,16 +256,16 @@ var Hood = function (data) {
     limit = "&limit=" + locationLimit;
     query = "&query=" + queryType;
     v = "&v=" + date;
+    authorization = "&oauth_token=HG5IOTFR2QGYTMJNHNEW32TL4VISFRKBE1LKS0AXT4SYLDOW&v=20170101";
 
-// removing Authorization & Category as venue searches shouldn't need them 6/11/17
-//    authorization = "&oauth_token=HG5IOTFR2QGYTMJNHNEW32TL4VISFRKBE1LKS0AXT4SYLDOW&v=20150301";
+// removing Category 6/11/17
 //    category = "&categoryId=" + catId;
     
     // Compile FourSquare API Request String based on Variables
-    foursquareApiQuery = foursquareBaseURL + initialLatLng + query + section + limit + radius + v;
+    foursquareApiQuery = foursquareBaseURL + authorization + initialLatLng + query + section + limit + radius + v;
 // adding Section & Radius
-// removing Authorization, Category & Intent from query string 6/11/17
-//     + authorization; + category; + intent
+// removing Category & Intent from query string 6/11/17
+//     + category; + intent
 
     // API Request to FourSquare; Venue Results Create Google Map Markers
     $.getJSON(foursquareApiQuery, function(data) {
