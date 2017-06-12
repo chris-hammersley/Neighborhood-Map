@@ -89,8 +89,8 @@ function MapViewModel() {
   // var catId = "4d4b7105d754a06374d81259"; // Category of 4Square Venue Results - Removed 6/11/17 due to changes in 4SQ API
   var date = 20170101; // 4Square param that indicates the client is up to date as of the specified date Added 06/11/17
   var queryType = "Happy Hours";
-  var sectionID = "food"; // Replaced 4Square Categories with Sections for Explore Venues (instead of Search Venues) Added 06/11/17
-  var radiusNo = 1500; // 4Square Search Radius in Meters Added 06/11/17
+  var sectionID = "trending"; // Replaced 4Square Categories with Sections for Explore Venues (instead of Search Venues) Added 06/11/17
+  var radiusNo = 900; // 4Square Search Radius in Meters Added 06/11/17
   var locationLimit = 20; // Number of Venue Results returned from 4Square Explore Query
 //  var tagIG = 'nolalocalfood'; // Instagram Tag to Retrieve IG Images from Instafeed
 
