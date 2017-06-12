@@ -263,7 +263,7 @@ var Hood = function (data) {
 //    category = "&categoryId=" + catId;
     
     // Compile FourSquare API Request String based on Variables
-    foursquareApiQuery = foursquareBaseURL + authorization + initialLatLng + query + section + limit + radius + client_id + client_secret + v;
+    foursquareApiQuery = foursquareBaseURL + initialLatLng + query + section + limit + radius + client_id + client_secret + v;
 // adding Section, Radius, API date, client id & client secret
 // removing Category & Intent from query string 6/11/17
 //     + category; + intent
